@@ -1,0 +1,2 @@
+# HearthstoneServer
+HearthstoneServer
