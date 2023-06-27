@@ -2,11 +2,18 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="HearthstoneClassic" />
+      </profile>
+      <profile name="Annotation profile for Jear" enabled="true">
+        <sourceOutputDir name="target/classes/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/classes/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Jear" />
       </profile>
     </annotationProcessing>
   </component>
