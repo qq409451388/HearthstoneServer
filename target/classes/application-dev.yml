@@ -1,0 +1,17 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    #url: jdbc:mysql://127.0.0.1:3006/hearthstone?characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://10.12.16.122:3550/cuishou?characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: rong360.com
+    initialSize: 5
+    maxActive: 20
+    maxWait: 2000
+
+netty:
+  port: 9001
