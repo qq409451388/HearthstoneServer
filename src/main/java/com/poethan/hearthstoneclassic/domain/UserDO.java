@@ -15,4 +15,10 @@ import javax.persistence.Table;
 public class UserDO extends BaseDO<Long> {
     @Column(name = "user_name")
     private String userName;
+    @Column(name = "pass_word")
+    private String passWord;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "status")
+    private Integer status;
 }

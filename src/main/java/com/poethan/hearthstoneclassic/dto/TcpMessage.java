@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 public class TcpMessage extends BaseDTO {
     private String action;
     private Long timestamp;
+    private String content;
 
     public TcpMessage() {
         this.timestamp = System.currentTimeMillis();
@@ -33,5 +34,22 @@ public class TcpMessage extends BaseDTO {
 
     public byte[] toByteArray() {
         return JsonUtils.encode(this).getBytes(StandardCharsets.UTF_8);
+    }
+
+    public static TcpMessage OK() {
+        TcpMessage message = new TcpMessage();
+        message.setAction("ACK");
+        return message;
+    }
+
+    public static TcpMessage ERROR() {
+        return ERROR("ERROR");
+    }
+
+    public static TcpMessage ERROR(String msg) {
+        TcpMessage message = new TcpMessage();
+        message.setAction("ERROR");
+        message.setContent(msg);
+        return message;
     }
 }

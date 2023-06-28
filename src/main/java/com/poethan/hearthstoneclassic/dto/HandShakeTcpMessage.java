@@ -10,4 +10,8 @@ import lombok.ToString;
 public class HandShakeTcpMessage extends TcpMessage {
     private String sessionId;
     private String userName;
+    private String userId;
+    private String uniqid;
+    private String deviceId;
+    private String clientIp;
 }
