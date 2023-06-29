@@ -21,6 +21,8 @@ public class CombatEventConstants {
     public static final String E_BATTLECRY_DESC = "使用时触发";
 
     public static final String E_COMBO = "COMBO";
-    public static final String E_COMBO_DESC = "使用时触发";
+    public static final String E_COMBO_DESC = "连击时触发";
 
+    public static final String E_ATTACK = "ATTACK";
+    public static final String E_ATTACK_DESC = "攻击时触发";
 }

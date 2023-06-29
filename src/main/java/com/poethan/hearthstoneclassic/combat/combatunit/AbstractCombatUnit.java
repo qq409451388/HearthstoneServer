@@ -2,6 +2,7 @@ package com.poethan.hearthstoneclassic.combat.combatunit;
 
 import com.poethan.hearthstoneclassic.combat.combatevent.AbstractCombatEvent;
 import com.poethan.hearthstoneclassic.constants.CombatUnitAction;
+import com.poethan.hearthstoneclassic.domain.CardDO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,6 +22,8 @@ abstract public class AbstractCombatUnit {
      * @see com.poethan.hearthstoneclassic.constants.CombatUnitConstants
      */
     private String combatUnitType;
+
+    private CardDO cardDO;
 
     /**
      * @see com.poethan.hearthstoneclassic.constants.CombatEventConstants
@@ -43,20 +46,13 @@ abstract public class AbstractCombatUnit {
      * 触发事件
      */
     protected void triggerEvent(CombatUnitAction action) {
-        combatUnitEvent.get(action).trigger();
+        combatUnitEvent.get(action).trigger(this);
     }
 
     /**
-     * 使用一个单位,对单个目标发起
-     * @param targetUnit 目标单位
+     * 使用一个单位
      */
-    abstract public void use(AbstractCombatUnit targetUnit);
-
-    /**
-     * 使用一个单位,对多个目标发起
-     * @param targetUnit 目标单位
-     */
-    abstract public void use(List<AbstractCombatUnit> targetUnit);
+    abstract public void use();
 
     public void startOfGame() {
         this.triggerEvent(CombatUnitAction.START_OF_GAME);

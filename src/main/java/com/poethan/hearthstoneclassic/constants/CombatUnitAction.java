@@ -10,6 +10,7 @@ public enum CombatUnitAction {
     E_CASTSWHENDRAWN(CombatEventConstants.E_CASTSWHENDRAWN, CombatEventConstants.E_CASTSWHENDRAWN_DESC, CombatEventCastsWhenDrawn.class),
     E_BATTLECRY(CombatEventConstants.E_BATTLECRY, CombatEventConstants.E_BATTLECRY_DESC, CombatEventBattlecry.class),
     E_COMBO(CombatEventConstants.E_COMBO, CombatEventConstants.E_COMBO_DESC, CombatEventCombo.class),
+    E_ATTACK(CombatEventConstants.E_ATTACK, CombatEventConstants.E_ATTACK_DESC, CombatEventAttack.class),
     DEAD(CombatEventConstants.E_DEATHRATTLE, CombatEventConstants.E_DEATHRATTLE_DESC, CombatEventDead.class);
 
     private String type;

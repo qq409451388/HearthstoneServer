@@ -16,22 +16,10 @@ import java.util.List;
 public class CombatUnitAttendant extends AbstractCombatUnit {
 
     /**
-     * 使用一个单位,对单个目标发起
-     *
-     * @param targetUnit 目标单位
+     * 随从上场
      */
     @Override
-    public void use(AbstractCombatUnit targetUnit) {
-        this.triggerEvent(CombatUnitAction.E_BATTLECRY);
-    }
-
-    /**
-     * 使用一个单位,对多个目标发起
-     *
-     * @param targetUnit 目标单位
-     */
-    @Override
-    public void use(List<AbstractCombatUnit> targetUnit) {
+    public void use() {
         this.triggerEvent(CombatUnitAction.E_BATTLECRY);
     }
 
@@ -40,5 +28,9 @@ public class CombatUnitAttendant extends AbstractCombatUnit {
      */
     public void dead() {
         this.triggerEvent(CombatUnitAction.DEAD);
+    }
+
+    public void attack() {
+        this.triggerEvent(CombatUnitAction.ATTACK);
     }
 }
