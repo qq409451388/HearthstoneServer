@@ -8,11 +8,11 @@ import java.util.Map;
 public class ActionUnitFactory {
     private static final Map<String, ActionUnit> map = new HashMap<>();
 
-    public static <M extends TcpMessage> ActionUnit<M> get(Class<? extends ActionUnit<M>> tClass) {
-        return map.get(tClass.getSimpleName());
+    public static <M extends TcpMessage> ActionUnit<M> get(String actionName) {
+        return map.get(actionName);
     }
 
-    public static <M extends TcpMessage, H extends ActionUnit<M>> void set(Class<H> tClass, ActionUnit<M> actionUnit) {
-        map.put(tClass.getSimpleName(), actionUnit);
+    public static <M extends TcpMessage, H extends ActionUnit<M>> void set(String actionName, ActionUnit<M> actionUnit) {
+        map.put(actionName, actionUnit);
     }
 }

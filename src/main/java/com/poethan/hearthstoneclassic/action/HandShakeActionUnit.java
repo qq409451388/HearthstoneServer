@@ -5,13 +5,12 @@ import com.poethan.hearthstoneclassic.dto.HandShakeTcpMessage;
 import com.poethan.hearthstoneclassic.dto.TcpMessage;
 import com.poethan.hearthstoneclassic.dto.UserSession;
 import com.poethan.hearthstoneclassic.logic.RedisLogic;
-import com.poethan.jear.module.cache.EzRedis;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Component
 public class HandShakeActionUnit extends ActionUnit<HandShakeTcpMessage> {
@@ -19,22 +18,40 @@ public class HandShakeActionUnit extends ActionUnit<HandShakeTcpMessage> {
     private RedisLogic redisLogic;
 
     @Override
-    public Class<HandShakeActionUnit> getSelfClass() {
-        return HandShakeActionUnit.class;
-    }
-
-    @Override
     public void channelReadLogic(ChannelHandlerContext ctx, HandShakeTcpMessage tcpMessage) {
         UserSession userSession = redisLogic.getUserSession(tcpMessage.getUserName());
         if (Objects.isNull(userSession)) {
-            ctx.channel().writeAndFlush(TcpMessage.ERROR().toByteArray());
+            ActionUnit.write(ctx, TcpMessage.ERROR());
             return;
         }
-        if (userSession.getSessionId().equals(tcpMessage.getSessionId())) {
-            ctx.channel().writeAndFlush(TcpMessage.ERROR().toByteArray());
+        if (!userSession.getSessionId().equals(tcpMessage.getSessionId())) {
+            ActionUnit.write(ctx, TcpMessage.ERROR());
             return;
         }
-        TcpClientContainer.addClient(tcpMessage.getSessionId(), ctx.channel());
-        ctx.channel().writeAndFlush(TcpMessage.OK().toByteArray());
+        Channel client = TcpClientContainer.getClient(tcpMessage.getSessionId());
+        if (Objects.nonNull(client) && client.isActive()) {
+            if (client.equals(ctx.channel())) {
+                ActionUnit.write(client, TcpMessage.ERROR(" Your account had logged."));
+            } else {
+                ActionUnit.write(client, TcpMessage.ALERT(" Your account is being logged in on another device."));
+                ActionUnit.write(ctx, TcpMessage.ERROR());
+            }
+        } else if (Objects.nonNull(client) && !client.isActive()) {
+            this.reHandShake(ctx, tcpMessage);
+        } else {
+            TcpClientContainer.addClient(tcpMessage.getSessionId(), ctx.channel(), false);
+            ActionUnit.write(ctx, TcpMessage.OK());
+        }
+    }
+
+    /**
+     * 因异常退出，重新握手
+     */
+    private void reHandShake(ChannelHandlerContext ctx, HandShakeTcpMessage tcpMessage) {
+        TcpClientContainer.disconnectException(tcpMessage.getSessionId());
+
+        // 通知客户端
+        TcpClientContainer.addClient(tcpMessage.getSessionId(), ctx.channel(), true);
+        ActionUnit.write(ctx, TcpMessage.OK());
     }
 }

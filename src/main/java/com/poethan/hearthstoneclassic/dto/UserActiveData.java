@@ -8,11 +8,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class UserSession extends BaseDTO {
-    private String sessionId;
+public class UserActiveData extends BaseDTO {
     private String userName;
-    private String userId;
-    private String uniqid;
-    private String deviceId;
-    private String clientIp;
 }
