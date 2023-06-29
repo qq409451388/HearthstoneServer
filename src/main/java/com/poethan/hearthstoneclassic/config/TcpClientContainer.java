@@ -1,20 +1,11 @@
 package com.poethan.hearthstoneclassic.config;
 
 import com.poethan.hearthstoneclassic.dto.UserActiveData;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.*;
-import io.netty.channel.nio.AbstractNioByteChannel;
-import io.netty.channel.nio.AbstractNioChannel;
-import io.netty.channel.nio.AbstractNioMessageChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.Attribute;
-import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.Assert;
 
-import java.net.SocketAddress;
-import java.nio.channels.SelectableChannel;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -32,6 +23,18 @@ public class TcpClientContainer {
         }
     }
 
+    public static Map<UserActiveData, Channel> all() {
+        Map<UserActiveData, Channel> all = new HashMap<>();
+        container.forEach((k, v) -> {
+            all.put(activeDataMap.get(k), v);
+        });
+        return all;
+    }
+
+    public static Collection<Channel> list() {
+        return container.values();
+    }
+
     public static void addClient(String sessionId, Channel channel, boolean reuseActiveData) {
         // 存在存活的客户端，不允许二次添加
         if (container.getOrDefault(sessionId, NULLCHANNEL).isActive()) {
@@ -39,8 +42,12 @@ public class TcpClientContainer {
         }
         container.put(sessionId, channel);
         if (!reuseActiveData || activeDataMap.containsKey(sessionId)) {
-            activeDataMap.put(sessionId, new UserActiveData());
+            activeDataMap.put(sessionId, new UserActiveData(sessionId));
         }
+    }
+
+    public static UserActiveData getActiveData(String sessionId) {
+        return activeDataMap.get(sessionId);
     }
 
     public static Channel getClient(String sessionId) {

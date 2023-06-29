@@ -10,4 +10,9 @@ import lombok.ToString;
 @ToString
 public class UserActiveData extends BaseDTO {
     private String userName;
+    private String sessionId;
+
+    public UserActiveData(String sessionId) {
+        this.sessionId = sessionId;
+    }
 }

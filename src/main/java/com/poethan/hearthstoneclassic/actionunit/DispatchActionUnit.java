@@ -1,4 +1,4 @@
-package com.poethan.hearthstoneclassic.action;
+package com.poethan.hearthstoneclassic.actionunit;
 
 import com.poethan.hearthstoneclassic.config.NoLoginException;
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
@@ -24,6 +24,7 @@ public class DispatchActionUnit extends SocketHandler<byte[]> {
         this.dispatch(ctx, tcpMessage);
     }
 
+    @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
         try {
             super.handlerRemoved(ctx);

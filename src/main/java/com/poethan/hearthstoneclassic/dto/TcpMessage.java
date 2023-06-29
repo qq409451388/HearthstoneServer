@@ -2,7 +2,6 @@ package com.poethan.hearthstoneclassic.dto;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.poethan.hearthstoneclassic.action.ActionUnit;
 import com.poethan.hearthstoneclassic.constants.ActionUnitConstants;
 import com.poethan.jear.dto.BaseDTO;
 import com.poethan.jear.utils.JsonUtils;

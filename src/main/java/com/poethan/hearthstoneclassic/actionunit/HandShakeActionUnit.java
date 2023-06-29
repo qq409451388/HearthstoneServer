@@ -1,4 +1,4 @@
-package com.poethan.hearthstoneclassic.action;
+package com.poethan.hearthstoneclassic.actionunit;
 
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
 import com.poethan.hearthstoneclassic.dto.HandShakeTcpMessage;
@@ -40,6 +40,7 @@ public class HandShakeActionUnit extends ActionUnit<HandShakeTcpMessage> {
             this.reHandShake(ctx, tcpMessage);
         } else {
             TcpClientContainer.addClient(tcpMessage.getSessionId(), ctx.channel(), false);
+            TcpClientContainer.getActiveData(tcpMessage.getSessionId()).setUserName(tcpMessage.getUserName());
             ActionUnit.write(ctx, TcpMessage.OK());
         }
     }

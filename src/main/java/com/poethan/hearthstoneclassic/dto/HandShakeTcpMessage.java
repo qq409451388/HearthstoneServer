@@ -1,7 +1,5 @@
 package com.poethan.hearthstoneclassic.dto;
 
-import com.poethan.hearthstoneclassic.action.ActionUnit;
-import com.poethan.hearthstoneclassic.action.HandShakeActionUnit;
 import com.poethan.hearthstoneclassic.constants.ActionUnitConstants;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.poethan.hearthstoneclassic.action;
+package com.poethan.hearthstoneclassic.actionunit;
 
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
 import com.poethan.hearthstoneclassic.dto.LogoutTcpMessage;
