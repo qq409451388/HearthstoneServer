@@ -1,11 +1,11 @@
 package com.poethan.hearthstoneclassic.combat.combatunit;
 
-import com.poethan.hearthstoneclassic.constants.CombatUnitAction;
+import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
+import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
+import com.poethan.hearthstoneclassic.constants.CombatUnitConstants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.List;
 
 /**
  * 随从
@@ -14,23 +14,35 @@ import java.util.List;
 @Setter
 @ToString
 public class CombatUnitAttendant extends AbstractCombatUnit {
+    private boolean canAttack;
+
+    public CombatUnitAttendant() {
+        this.setCombatUnitType(CombatUnitConstants.TYPE_ATTENDANT);
+        this.canAttack = false;
+    }
 
     /**
      * 随从上场
      */
     @Override
-    public void use() {
-        this.triggerEvent(CombatUnitAction.E_BATTLECRY);
+    public CombatLog use() {
+        this.triggerEvent(CombatUnitActionEnum.BATTLECRY);
+        return null;
     }
 
     /**
      * 死亡
      */
-    public void dead() {
-        this.triggerEvent(CombatUnitAction.DEAD);
+    public CombatLog dead() {
+        this.triggerEvent(CombatUnitActionEnum.DEAD);
+        return null;
     }
 
-    public void attack() {
-        this.triggerEvent(CombatUnitAction.ATTACK);
+    /**
+     * 攻击
+     */
+    public CombatLog attack() {
+        this.triggerEvent(CombatUnitActionEnum.ATTACK);
+        return null;
     }
 }

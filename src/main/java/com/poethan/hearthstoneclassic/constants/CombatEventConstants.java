@@ -11,6 +11,9 @@ public class CombatEventConstants {
     public static final String E_START_OF_COMBAT = "START_OF_COMBAT";
     public static final String E_START_OF_COMBAT_DESC = "回合开始";
 
+    public static final String E_START_OF_NEXT_COMBAT = "START_OF_NEXT_COMBAT";
+    public static final String E_START_OF_NEXT_COMBAT_DESC = "下回合开始";
+
     public static final String E_CASTSWHENDRAWN = "CASTSWHENDRAWN";
     public static final String E_CASTSWHENDRAWN_DESC = "抽到时触发";
 

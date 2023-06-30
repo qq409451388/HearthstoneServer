@@ -1,4 +1,21 @@
 package com.poethan.hearthstoneclassic.combat.combatevent;
 
+import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatUnit;
+import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
+
 public class CombatEventCastsWhenDrawn extends AbstractCombatEvent {
+    @Override
+    public void bindAction() {
+
+    }
+
+    @Override
+    public CombatUnitActionEnum getBindAction() {
+        return null;
+    }
+
+    @Override
+    public void trigger(AbstractCombatUnit unit) {
+
+    }
 }

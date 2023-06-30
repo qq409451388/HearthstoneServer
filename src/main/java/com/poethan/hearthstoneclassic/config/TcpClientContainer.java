@@ -50,6 +50,15 @@ public class TcpClientContainer {
         return activeDataMap.get(sessionId);
     }
 
+    public static UserActiveData getActiveDataByUserName(String userName) {
+        for (Map.Entry<String, UserActiveData> entry : activeDataMap.entrySet()) {
+            if (userName.equals(entry.getValue().getUserName())) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
     public static Channel getClient(String sessionId) {
         return container.get(sessionId);
     }

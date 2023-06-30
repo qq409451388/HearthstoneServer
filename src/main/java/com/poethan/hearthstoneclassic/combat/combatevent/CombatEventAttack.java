@@ -1,7 +1,7 @@
 package com.poethan.hearthstoneclassic.combat.combatevent;
 
 import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatUnit;
-import com.poethan.hearthstoneclassic.constants.CombatUnitAction;
+import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 
 public class CombatEventAttack extends AbstractCombatEvent {
     @Override
@@ -10,7 +10,7 @@ public class CombatEventAttack extends AbstractCombatEvent {
     }
 
     @Override
-    public CombatUnitAction getBindAction() {
+    public CombatUnitActionEnum getBindAction() {
         return null;
     }
 

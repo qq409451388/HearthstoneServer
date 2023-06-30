@@ -1,14 +1,8 @@
 package com.poethan.hearthstoneclassic.combat.combatunit;
 
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
-import com.poethan.hearthstoneclassic.constants.CombatUnitConstants;
 
-public class CombatUnitMagic extends AbstractCombatUnit{
-
-    public CombatUnitMagic() {
-        this.setCombatUnitType(CombatUnitConstants.TYPE_MAGIC);
-    }
-
+abstract public class CombatUnitHero extends AbstractCombatUnit {
     /**
      * 使用一个单位
      */
@@ -16,4 +10,10 @@ public class CombatUnitMagic extends AbstractCombatUnit{
     public CombatLog use() {
         return null;
     }
+
+    public int getDamage() {
+        return 0;
+    }
+
+    abstract public CombatLog attack();
 }

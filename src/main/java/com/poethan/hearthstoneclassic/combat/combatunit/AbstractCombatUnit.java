@@ -1,7 +1,8 @@
 package com.poethan.hearthstoneclassic.combat.combatunit;
 
 import com.poethan.hearthstoneclassic.combat.combatevent.AbstractCombatEvent;
-import com.poethan.hearthstoneclassic.constants.CombatUnitAction;
+import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
+import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 import com.poethan.hearthstoneclassic.domain.CardDO;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +27,14 @@ abstract public class AbstractCombatUnit {
     private CardDO cardDO;
 
     /**
+     * 目标单位选择
+     */
+    private List<AbstractCombatUnit> targetCombatUnit;
+
+    /**
      * @see com.poethan.hearthstoneclassic.constants.CombatEventConstants
      */
-    private Map<CombatUnitAction, AbstractCombatEvent> combatUnitEvent;
+    private Map<CombatUnitActionEnum, AbstractCombatEvent> combatUnitEvent;
 
     public void loadEvent(Collection<AbstractCombatEvent> events) {
         events.forEach(this::loadEvent);
@@ -45,20 +51,20 @@ abstract public class AbstractCombatUnit {
     /**
      * 触发事件
      */
-    protected void triggerEvent(CombatUnitAction action) {
+    protected void triggerEvent(CombatUnitActionEnum action) {
         combatUnitEvent.get(action).trigger(this);
     }
 
     /**
      * 使用一个单位
      */
-    abstract public void use();
+    abstract public CombatLog use();
 
     public void startOfGame() {
-        this.triggerEvent(CombatUnitAction.START_OF_GAME);
+        this.triggerEvent(CombatUnitActionEnum.START_OF_GAME);
     }
 
     public void startOfCombat() {
-        this.triggerEvent(CombatUnitAction.START_OF_GAME);
+        this.triggerEvent(CombatUnitActionEnum.START_OF_GAME);
     }
 }

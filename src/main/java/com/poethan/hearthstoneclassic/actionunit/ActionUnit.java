@@ -1,6 +1,8 @@
 package com.poethan.hearthstoneclassic.actionunit;
 
+import com.poethan.hearthstoneclassic.config.TcpClientContainer;
 import com.poethan.hearthstoneclassic.dto.TcpMessage;
+import com.poethan.hearthstoneclassic.dto.UserSession;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import jakarta.annotation.PostConstruct;
@@ -17,6 +19,10 @@ abstract public class ActionUnit<M extends TcpMessage> {
 
     public static void write(ChannelHandlerContext ctx, TcpMessage tcpMessage) {
         ctx.writeAndFlush(tcpMessage.toByteArray());
+    }
+
+    public static void write(UserSession session, TcpMessage tcpMessage) {
+        write(TcpClientContainer.getClient(session.getSessionId()), tcpMessage);
     }
 
     public static boolean write(Channel channel, TcpMessage tcpMessage) {
