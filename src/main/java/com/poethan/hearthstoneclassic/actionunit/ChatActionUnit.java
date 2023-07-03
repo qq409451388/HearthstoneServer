@@ -1,8 +1,8 @@
 package com.poethan.hearthstoneclassic.actionunit;
 
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
-import com.poethan.hearthstoneclassic.dto.ChatTcpMessage;
-import com.poethan.hearthstoneclassic.dto.TcpMessage;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.ChatTcpMessage;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.TcpMessage;
 import com.poethan.hearthstoneclassic.dto.UserSession;
 import com.poethan.hearthstoneclassic.logic.RedisLogic;
 import io.netty.channel.Channel;

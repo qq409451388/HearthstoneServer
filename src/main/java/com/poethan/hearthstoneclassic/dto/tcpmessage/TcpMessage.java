@@ -1,4 +1,4 @@
-package com.poethan.hearthstoneclassic.dto;
+package com.poethan.hearthstoneclassic.dto.tcpmessage;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -22,7 +22,9 @@ import java.nio.charset.StandardCharsets;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = HandShakeTcpMessage.class, name = ActionUnitConstants.UNIT_HANDSHAKE),
         @JsonSubTypes.Type(value = ChatTcpMessage.class, name = ActionUnitConstants.UNIT_CHAT),
-        @JsonSubTypes.Type(value = LogoutTcpMessage.class, name = ActionUnitConstants.UNIT_LOGOUT)
+        @JsonSubTypes.Type(value = LogoutTcpMessage.class, name = ActionUnitConstants.UNIT_LOGOUT),
+        @JsonSubTypes.Type(value = CombatSearchTcpMessage.class, name = ActionUnitConstants.UNIT_COMBAT_SEARCH),
+        @JsonSubTypes.Type(value = CombatTcpMessage.class, name = ActionUnitConstants.UNIT_COMBAT)
 })
 @ToString
 public class TcpMessage extends BaseDTO {

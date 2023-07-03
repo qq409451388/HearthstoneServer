@@ -1,8 +1,8 @@
 package com.poethan.hearthstoneclassic.actionunit;
 
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
-import com.poethan.hearthstoneclassic.dto.LogoutTcpMessage;
-import com.poethan.hearthstoneclassic.dto.TcpMessage;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.LogoutTcpMessage;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.TcpMessage;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

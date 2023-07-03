@@ -56,11 +56,20 @@ public class TcpClientContainer {
                 return entry.getValue();
             }
         }
+        // todo unmatch，then try disconnect client
         return null;
     }
 
     public static Channel getClient(String sessionId) {
         return container.get(sessionId);
+    }
+
+    public static Channel getClientByUserName(String userName) {
+        UserActiveData userActiveData = getActiveDataByUserName(userName);
+        if (Objects.isNull(userActiveData)) {
+            return null;
+        }
+        return getClient(userActiveData.getSessionId());
     }
 
     public static void remove(Channel channel) {

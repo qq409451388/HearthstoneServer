@@ -10,6 +10,8 @@ public class ActionUnitConstants {
      */
     public static final String UNIT_HANDSHAKE = "HandShake";
     public static final String UNIT_CHAT = "Chat";
+    public static final String UNIT_COMBAT_SEARCH = "CombatSearch";
+    public static final String UNIT_COMBAT = "Combat";
 
     /**
      * System Unit

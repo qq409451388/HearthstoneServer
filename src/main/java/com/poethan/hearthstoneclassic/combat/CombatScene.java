@@ -21,7 +21,7 @@ public class CombatScene extends BaseDTO implements INotifyCombatScene,IApiComba
     private Long deckId1;
     private Long deckId2;
     private Map<Integer, List<CombatLog>> logs;
-    private Map<String, CombatSceneUserUnit> combatUserUnit;
+    public Map<String, CombatSceneUserUnit> combatUserUnit;
     private Integer round;
     /**
      * 当前的活动角色

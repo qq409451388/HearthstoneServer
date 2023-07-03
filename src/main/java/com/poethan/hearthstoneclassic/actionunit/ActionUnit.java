@@ -1,7 +1,7 @@
 package com.poethan.hearthstoneclassic.actionunit;
 
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
-import com.poethan.hearthstoneclassic.dto.TcpMessage;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.TcpMessage;
 import com.poethan.hearthstoneclassic.dto.UserSession;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -31,5 +31,9 @@ abstract public class ActionUnit<M extends TcpMessage> {
             return true;
         }
         return false;
+    }
+
+    public static void write(String userName, TcpMessage tcpMessage) {
+        write(TcpClientContainer.getClientByUserName(userName), tcpMessage);
     }
 }

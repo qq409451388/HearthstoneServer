@@ -1,4 +1,4 @@
-package com.poethan.hearthstoneclassic.dto;
+package com.poethan.hearthstoneclassic.dto.tcpmessage;
 
 import com.poethan.hearthstoneclassic.constants.ActionUnitConstants;
 import lombok.Getter;

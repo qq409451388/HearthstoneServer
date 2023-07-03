@@ -1,9 +1,8 @@
-package com.poethan.hearthstoneclassic.dto;
+package com.poethan.hearthstoneclassic.dto.tcpmessage;
 
 import com.poethan.hearthstoneclassic.combat.CombatSceneUserUnit;
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
 import com.poethan.hearthstoneclassic.constants.CombatEventConstants;
-import com.poethan.hearthstoneclassic.constants.CombatUnitConstants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

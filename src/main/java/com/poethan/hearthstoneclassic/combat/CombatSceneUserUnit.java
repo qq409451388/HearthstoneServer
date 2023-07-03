@@ -1,18 +1,18 @@
 package com.poethan.hearthstoneclassic.combat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.poethan.hearthstoneclassic.actionunit.ActionUnit;
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
 import com.poethan.hearthstoneclassic.combat.combatunit.*;
-import com.poethan.hearthstoneclassic.dao.CardDAO;
 import com.poethan.hearthstoneclassic.domain.CardDO;
-import com.poethan.hearthstoneclassic.dto.CombatTcpMessage;
-import com.poethan.hearthstoneclassic.dto.TcpMessage;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.CombatTcpMessage;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.TcpMessage;
 import com.poethan.hearthstoneclassic.dto.UserSession;
 import com.poethan.hearthstoneclassic.logic.CardLogic;
 import com.poethan.jear.dto.BaseDTO;
+import com.poethan.jear.utils.JsonUtils;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.assertj.core.util.Lists;
 
 import java.util.Collections;
@@ -20,13 +20,14 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
+    @JsonIgnore
     private CardLogic cardLogic;
     /**
      * 卡组id
      */
     private Long deckId;
+    @JsonIgnore
     private INotifyCombatScene combatScene;
     private UserSession session;
     private ListUnit<CardDO> handCardCollection;
@@ -35,20 +36,20 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
     private Career career;
     private Integer magic;
     private Integer maxMagic;
+    @JsonIgnore
     private boolean isActive;
+    @JsonIgnore
     private boolean isConfirmHandCard;
 
     public void sendToClient(TcpMessage message) {
         ActionUnit.write(this.session, message);
     }
 
-    public CombatSceneUserUnit(CardLogic cardLogic, INotifyCombatScene combatScene, Long deckId) {
+    public CombatSceneUserUnit(CardLogic cardLogic) {
         this.cardLogic = cardLogic;
-        this.combatScene = combatScene;
         this.handCardCollection = new ListUnit<>(10);
         this.deckCardCollection = new ListUnit<>(30);
         this.combatUnits = new ListUnit<>(7);
-        this.deckId = deckId;
         this.isActive = false;
         this.isConfirmHandCard = false;
     }
@@ -179,5 +180,9 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
      */
     public void afterDirective(CombatLog combatLog) {
         this.combatScene.log(combatLog);
+    }
+
+    public String toString() {
+        return JsonUtils.encode(this);
     }
 }

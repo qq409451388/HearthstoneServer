@@ -1,6 +1,6 @@
 package com.poethan.hearthstoneclassic.actionunit;
 
-import com.poethan.hearthstoneclassic.dto.TcpMessage;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.TcpMessage;
 
 import java.util.HashMap;
 import java.util.Map;

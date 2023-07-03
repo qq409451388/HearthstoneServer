@@ -2,17 +2,22 @@ package com.poethan.hearthstoneclassic.actionunit;
 
 import com.poethan.hearthstoneclassic.config.NoLoginException;
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
-import com.poethan.hearthstoneclassic.dto.LoginNecessaryActionUnit;
-import com.poethan.hearthstoneclassic.dto.TcpMessage;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.LoginNecessaryActionUnit;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.TcpMessage;
+import com.poethan.hearthstoneclassic.logic.RedisLogic;
 import com.poethan.jear.module.web.tcp.SocketHandler;
 import com.poethan.jear.utils.JsonUtils;
 import io.netty.channel.ChannelHandlerContext;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
 @Slf4j
 public class DispatchActionUnit extends SocketHandler<byte[]> {
+    @Resource
+    private RedisLogic redisLogic;
+
     public DispatchActionUnit() {
         this.setMsgDataType(byte[].class);
     }
