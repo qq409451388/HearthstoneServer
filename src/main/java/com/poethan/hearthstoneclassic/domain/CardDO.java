@@ -7,10 +7,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Column;
+import javax.persistence.Table;
 
 @Getter
 @Setter
 @ToString
+@Table(name = "cards")
 public class CardDO extends BaseDO<Long> {
     /**
      * 卡牌名称

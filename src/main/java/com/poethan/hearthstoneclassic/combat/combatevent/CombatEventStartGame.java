@@ -18,5 +18,6 @@ public class CombatEventStartGame extends AbstractCombatEvent {
 
     @Override
     public void trigger(AbstractCombatUnit unit) {
+        System.out.println("213213");
     }
 }

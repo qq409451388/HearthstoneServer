@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class LogoutTcpMessage extends LoginNecessaryActionUnit {
+public class LogoutTcpMessage extends LoginNecessaryTcpMessage {
     private String userName;
 
     public LogoutTcpMessage() {

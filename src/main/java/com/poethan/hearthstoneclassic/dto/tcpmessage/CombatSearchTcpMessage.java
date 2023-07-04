@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CombatSearchTcpMessage extends LoginNecessaryActionUnit {
+public class CombatSearchTcpMessage extends LoginNecessaryTcpMessage {
     private Long deckId;
     private String toUserName;
     private String gameId;

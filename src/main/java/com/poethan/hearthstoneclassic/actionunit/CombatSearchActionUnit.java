@@ -1,12 +1,13 @@
 package com.poethan.hearthstoneclassic.actionunit;
 
 import com.poethan.hearthstoneclassic.combat.CombatScene;
+import com.poethan.hearthstoneclassic.combat.CombatSceneUserUnit;
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
-import com.poethan.hearthstoneclassic.constants.CombatEventConstants;
 import com.poethan.hearthstoneclassic.constants.CombatSearchConstants;
 import com.poethan.hearthstoneclassic.constants.UserConstants;
 import com.poethan.hearthstoneclassic.dto.UserActiveData;
 import com.poethan.hearthstoneclassic.dto.tcpmessage.CombatSearchTcpMessage;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.CombatTcpMessage;
 import com.poethan.hearthstoneclassic.dto.tcpmessage.TcpMessage;
 import com.poethan.hearthstoneclassic.logic.CombatLogic;
 import com.poethan.jear.utils.EzDataUtils;
@@ -82,6 +83,10 @@ public class CombatSearchActionUnit extends ActionUnit<CombatSearchTcpMessage> {
      * inviter 自行取消
      */
     private void cancelInvite(ChannelHandlerContext ctx, CombatSearchTcpMessage tcpMessage) {
+        if (!EzDataUtils.checkAll(tcpMessage.getGameId(), tcpMessage.getUserName(), tcpMessage.getToUserName())) {
+            ActionUnit.write(ctx, TcpMessage.ERROR("params error."));
+            return;
+        }
         boolean res = combatLogic.closeSelfForInvite(tcpMessage.getUserName());
         UserActiveData userActiveData = TcpClientContainer.getActiveDataByUserName(tcpMessage.getUserName());
         if (Objects.nonNull(userActiveData)) {
@@ -105,6 +110,10 @@ public class CombatSearchActionUnit extends ActionUnit<CombatSearchTcpMessage> {
      * invitee 拒绝邀请
      */
     private void reject(ChannelHandlerContext ctx, CombatSearchTcpMessage tcpMessage) {
+        if (!EzDataUtils.checkAll(tcpMessage.getGameId(), tcpMessage.getUserName(), tcpMessage.getToUserName())) {
+            ActionUnit.write(ctx, TcpMessage.ERROR("params error."));
+            return;
+        }
         boolean res = combatLogic.close(tcpMessage.getGameId());
         UserActiveData userActiveData = TcpClientContainer.getActiveDataByUserName(tcpMessage.getToUserName());
         if (Objects.nonNull(userActiveData)) {
@@ -129,6 +138,11 @@ public class CombatSearchActionUnit extends ActionUnit<CombatSearchTcpMessage> {
      * invitee 接受邀请
      */
     private void accept(ChannelHandlerContext ctx, CombatSearchTcpMessage tcpMessage) {
+        if (!EzDataUtils.checkAll(tcpMessage.getGameId(), tcpMessage.getUserName(),
+                tcpMessage.getToUserName(), tcpMessage.getDeckId())) {
+            ActionUnit.write(ctx, TcpMessage.ERROR("params error."));
+            return;
+        }
         // 邀请者
         UserActiveData userActiveDataInviter = TcpClientContainer.getActiveDataByUserName(tcpMessage.getToUserName());
         if (Objects.nonNull(userActiveDataInviter)) {
@@ -144,6 +158,7 @@ public class CombatSearchActionUnit extends ActionUnit<CombatSearchTcpMessage> {
             ActionUnit.write(ctx, TcpMessage.ERROR("game not found."));
             return;
         }
+        combatScene.start();
         // 通知双方进入比赛页面
         CombatSearchTcpMessage combatSearchTcpMessage = new CombatSearchTcpMessage();
         combatSearchTcpMessage.setGameId(tcpMessage.getGameId());
@@ -155,12 +170,21 @@ public class CombatSearchActionUnit extends ActionUnit<CombatSearchTcpMessage> {
     }
 
     private void inCombat(ChannelHandlerContext ctx, CombatSearchTcpMessage tcpMessage) {
+        if (!EzDataUtils.check(tcpMessage.getGameId())) {
+            ActionUnit.write(ctx, TcpMessage.ERROR("params error."));
+            return;
+        }
+        UserActiveData userActiveData = TcpClientContainer.getActiveDataByUserName(tcpMessage.getUserName());
+        if (Objects.nonNull(userActiveData)) {
+            userActiveData.setGameId(tcpMessage.getGameId());
+        }
         CombatScene combatScene = combatLogic.getCombatSceneById(tcpMessage.getGameId());
         if (Objects.isNull(combatScene)) {
             ActionUnit.write(ctx, TcpMessage.ERROR("game not found."));
             return;
         }
-        combatScene.start();
+        CombatSceneUserUnit combatSceneUserUnit = combatScene.getCombatUserUnit().get(tcpMessage.getUserName());
+        ActionUnit.write(ctx, CombatTcpMessage.initCombat(combatSceneUserUnit));
     }
 
     private void combatEnd(ChannelHandlerContext ctx, CombatSearchTcpMessage tcpMessage) {

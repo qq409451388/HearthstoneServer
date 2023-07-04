@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ChatTcpMessage extends LoginNecessaryActionUnit {
+public class ChatTcpMessage extends LoginNecessaryTcpMessage {
     private String content;
     private String sendTo;
     private String from;

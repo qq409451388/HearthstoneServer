@@ -23,6 +23,7 @@ public class CombatScene extends BaseDTO implements INotifyCombatScene,IApiComba
     private Map<Integer, List<CombatLog>> logs;
     public Map<String, CombatSceneUserUnit> combatUserUnit;
     private Integer round;
+    private boolean hasStarted;
     /**
      * 当前的活动角色
      */
@@ -54,23 +55,25 @@ public class CombatScene extends BaseDTO implements INotifyCombatScene,IApiComba
     }
 
     public void start() {
+        if (this.hasStarted) {
+            return;
+        }
         this.activeUser = 0 == (int)(1000 * Math.random())%2 ? userName1 : userName2;
         this.nextRound();
+        this.hasStarted = true;
     }
 
     public void nextRound() {
         this.round++;
-        this.getActiveUserUnit().endRound();
+        this.getActiveUserUnit().setActive(false);
 
         //交换活动用户
         this.activeUser = activeUser.equals(userName1) ? userName2 : userName1;
         this.getCombatSceneUserUnit1().setActive(activeUser.equals(this.getUserName1()));
         this.getCombatSceneUserUnit2().setActive(activeUser.equals(this.getUserName2()));
 
-        if (1 == this.round) {
-            this.getCombatSceneUserUnit1().firstRound();
-            this.getCombatSceneUserUnit2().firstRound();
-        }
+        this.getCombatSceneUserUnit1().firstRound();
+        this.getCombatSceneUserUnit2().firstRound();
 
         this.getActiveUserUnit().newRound();
     }

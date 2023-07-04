@@ -31,6 +31,7 @@ public class HandShakeActionUnit extends ActionUnit<HandShakeTcpMessage> {
         Channel client = TcpClientContainer.getClient(tcpMessage.getSessionId());
         if (Objects.nonNull(client) && client.isActive()) {
             if (client.equals(ctx.channel())) {
+                TcpClientContainer.addClient(tcpMessage.getSessionId(), ctx.channel(), true);
                 ActionUnit.write(client, TcpMessage.ERROR(" Your account had logged."));
             } else {
                 ActionUnit.write(client, TcpMessage.ALERT(" Your account is being logged in on another device."));

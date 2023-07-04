@@ -2,7 +2,7 @@ package com.poethan.hearthstoneclassic.actionunit;
 
 import com.poethan.hearthstoneclassic.config.NoLoginException;
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
-import com.poethan.hearthstoneclassic.dto.tcpmessage.LoginNecessaryActionUnit;
+import com.poethan.hearthstoneclassic.dto.tcpmessage.LoginNecessaryTcpMessage;
 import com.poethan.hearthstoneclassic.dto.tcpmessage.TcpMessage;
 import com.poethan.hearthstoneclassic.logic.RedisLogic;
 import com.poethan.jear.module.web.tcp.SocketHandler;
@@ -46,8 +46,8 @@ public class DispatchActionUnit extends SocketHandler<byte[]> {
                 log.warn("Unmatched ActionUnit for message:{}", JsonUtils.encode(tcpMessage));
                 return;
             }
-            if (tcpMessage instanceof LoginNecessaryActionUnit) {
-                TcpClientContainer.auth(ctx.channel(), ((LoginNecessaryActionUnit) tcpMessage).getSessionId());
+            if (tcpMessage instanceof LoginNecessaryTcpMessage) {
+                TcpClientContainer.auth(ctx.channel(), ((LoginNecessaryTcpMessage) tcpMessage).getSessionId());
             }
             au.channelReadLogic(ctx, tcpMessage);
         } catch (NoLoginException nle) {

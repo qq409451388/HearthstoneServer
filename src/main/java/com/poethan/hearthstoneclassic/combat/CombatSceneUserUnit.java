@@ -52,9 +52,14 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
         this.combatUnits = new ListUnit<>(7);
         this.isActive = false;
         this.isConfirmHandCard = false;
+        this.magic = 0;
+        this.maxMagic = 0;
     }
 
     public void firstRound() {
+        if (this.isConfirmHandCard()) {
+            return;
+        }
         List<CardDO> cardDeckList = this.cardLogic.getDao().getCardCollectionByDeckId(this.deckId);
         Collections.shuffle(cardDeckList);
 
@@ -70,7 +75,6 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
             this.handCardCollection.add(this.cardLogic.getDao().getCoinCard());
         }
         this.deckCardCollection.addAll(cardDeckList);
-        this.sendToClient(CombatTcpMessage.firstRound(this));
     }
 
     public void confirmFirstRound() {
