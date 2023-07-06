@@ -14,7 +14,8 @@ import java.util.List;
 public class CardDAO extends BaseDAO<Long, CardDO> {
 
     public CardDO getCoinCard() {
-        return this.findById(CommonConstants.COIN_CARD_ID);
+        return this.findOne("where card_uniqid = :cardUniqid",
+                SqlParam.create("cardUniqid", CommonConstants.COIN_CARD_UNIQID));
     }
 
     public List<CardDO> getCardCollectionByDeckId(Long deckId) {

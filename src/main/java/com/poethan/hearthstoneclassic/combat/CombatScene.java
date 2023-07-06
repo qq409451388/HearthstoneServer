@@ -2,6 +2,9 @@ package com.poethan.hearthstoneclassic.combat;
 
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLogHero;
+import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
+import com.poethan.hearthstoneclassic.combat.interfaces.IApiCombatScene;
+import com.poethan.hearthstoneclassic.combat.interfaces.INotifyCombatScene;
 import com.poethan.jear.dto.BaseDTO;
 import com.poethan.jear.utils.EncodeUtils;
 import com.poethan.jear.utils.SystemUtils;
@@ -14,14 +17,14 @@ import java.util.*;
 @Setter
 @Getter
 @ToString
-public class CombatScene extends BaseDTO implements INotifyCombatScene,IApiCombatScene {
+public class CombatScene extends BaseDTO implements INotifyCombatScene, IApiCombatScene {
     private String gameId;
     private String userName1;
     private String userName2;
     private Long deckId1;
     private Long deckId2;
     private Map<Integer, List<CombatLog>> logs;
-    public Map<String, CombatSceneUserUnit> combatUserUnit;
+    public Map<String, IAbilityCombatUserUnit> combatUserUnit;
     private Integer round;
     private boolean hasStarted;
     /**
@@ -29,16 +32,21 @@ public class CombatScene extends BaseDTO implements INotifyCombatScene,IApiComba
      */
     private String activeUser;
 
-    public CombatSceneUserUnit getActiveUserUnit() {
+    public IAbilityCombatUserUnit getActiveUserUnit() {
         return combatUserUnit.get(activeUser);
     }
 
-    public CombatSceneUserUnit getCombatSceneUserUnit1() {
+    public IAbilityCombatUserUnit getCombatSceneUserUnit1() {
         return combatUserUnit.get(userName1);
     }
 
-    public CombatSceneUserUnit getCombatSceneUserUnit2() {
+    public IAbilityCombatUserUnit getCombatSceneUserUnit2() {
         return combatUserUnit.get(userName2);
+    }
+
+    @Override
+    public IAbilityCombatUserUnit getCombatSceneUserUnit(String userName) {
+        return this.getCombatUserUnit().get(userName);
     }
 
     public CombatScene(String userName1, String userName2) {
@@ -50,7 +58,7 @@ public class CombatScene extends BaseDTO implements INotifyCombatScene,IApiComba
         this.round = 0;
     }
 
-    public CombatSceneUserUnit getAnotherUserUnit(String userName) {
+    public IAbilityCombatUserUnit getAnotherUserUnit(String userName) {
         return combatUserUnit.get(userName.equals(userName1) ? userName2 : userName1);
     }
 
@@ -74,8 +82,6 @@ public class CombatScene extends BaseDTO implements INotifyCombatScene,IApiComba
 
         this.getCombatSceneUserUnit1().firstRound();
         this.getCombatSceneUserUnit2().firstRound();
-
-        this.getActiveUserUnit().newRound();
     }
 
     public void log(CombatLog combatLog) {
@@ -91,5 +97,9 @@ public class CombatScene extends BaseDTO implements INotifyCombatScene,IApiComba
             return ((CombatLogHero) log).getPostHealth() <= 0;
         }
         return false;
+    }
+
+    public List<CombatLog> getRoundLogs() {
+        return this.logs.get(this.round);
     }
 }

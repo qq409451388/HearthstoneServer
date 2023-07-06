@@ -2,6 +2,7 @@ package com.poethan.hearthstoneclassic.actionunit;
 
 import com.poethan.hearthstoneclassic.combat.CombatScene;
 import com.poethan.hearthstoneclassic.combat.CombatSceneUserUnit;
+import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
 import com.poethan.hearthstoneclassic.constants.CombatSearchConstants;
 import com.poethan.hearthstoneclassic.constants.UserConstants;
@@ -183,8 +184,8 @@ public class CombatSearchActionUnit extends ActionUnit<CombatSearchTcpMessage> {
             ActionUnit.write(ctx, TcpMessage.ERROR("game not found."));
             return;
         }
-        CombatSceneUserUnit combatSceneUserUnit = combatScene.getCombatUserUnit().get(tcpMessage.getUserName());
-        ActionUnit.write(ctx, CombatTcpMessage.initCombat(combatSceneUserUnit));
+        IAbilityCombatUserUnit combatSceneUserUnit = combatScene.getCombatSceneUserUnit(tcpMessage.getUserName());
+        ActionUnit.write(ctx, CombatTcpMessage.initCombat(tcpMessage.getGameId(), combatSceneUserUnit));
     }
 
     private void combatEnd(ChannelHandlerContext ctx, CombatSearchTcpMessage tcpMessage) {

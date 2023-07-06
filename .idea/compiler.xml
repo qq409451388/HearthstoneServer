@@ -21,7 +21,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="HearthstoneClassic" options="-parameters" />
-      <module name="Jear" options="--add-modules java.xml.ws.annotation" />
+      <module name="Jear" options="" />
       <module name="hearthstoneclassic" options="-parameters" />
     </option>
   </component>

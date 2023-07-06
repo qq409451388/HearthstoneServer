@@ -1,9 +1,11 @@
 package com.poethan.hearthstoneclassic.combat.combatunit;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.poethan.hearthstoneclassic.combat.combatevent.AbstractCombatEvent;
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
 import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 import com.poethan.hearthstoneclassic.domain.CardDO;
+import com.poethan.hearthstoneclassic.dto.ActiveCardUnit;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,12 +26,22 @@ abstract public class AbstractCombatUnit {
      */
     private String combatUnitType;
 
+    /**
+     * 是否可以使用：攻击、释放
+     */
+    private boolean isActive;
+
     private CardDO cardDO;
 
+    @JsonIgnore
+    private List<Class<? extends AbstractCombatUnit>> allowTargetType;
+
     /**
-     * 目标单位选择
+     * 是否可以使用：攻击、释放
      */
-    private List<AbstractCombatUnit> targetCombatUnit;
+    public boolean isActive() {
+        return isActive;
+    }
 
     /**
      * @see com.poethan.hearthstoneclassic.constants.CombatEventConstants
@@ -58,7 +70,7 @@ abstract public class AbstractCombatUnit {
     /**
      * 使用一个单位
      */
-    abstract public CombatLog use();
+    abstract public CombatLog use(ActiveCardUnit activeCardUnit);
 
     public void startOfGame() {
         this.triggerEvent(CombatUnitActionEnum.START_OF_GAME);

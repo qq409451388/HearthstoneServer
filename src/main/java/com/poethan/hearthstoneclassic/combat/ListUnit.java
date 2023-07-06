@@ -25,4 +25,8 @@ public class ListUnit<T> extends ArrayList<T> {
             action.accept(t);
         }
     }
+
+    public T getLast() {
+        return this.get(this.size() - 1);
+    }
 }

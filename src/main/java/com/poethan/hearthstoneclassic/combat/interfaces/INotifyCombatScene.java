@@ -1,6 +1,8 @@
-package com.poethan.hearthstoneclassic.combat;
+package com.poethan.hearthstoneclassic.combat.interfaces;
 
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
+
+import java.util.List;
 
 /**
  * 来自CombatScene的能力，只给CombatSceneUserUnit使用一部分
@@ -24,5 +26,11 @@ public interface INotifyCombatScene {
     /**
      * 已知当前CombatSceneUserUnit所属的userName，获取另一个CombatSceneUserUnit
      */
-    IApiCombatUserUnit getAnotherUserUnit(String currentUserName);
+    IAbilityCombatUserUnit getAnotherUserUnit(String currentUserName);
+
+    /**
+     * 获取当前回合生成的log列表
+     */
+    List<CombatLog> getRoundLogs();
+
 }

@@ -23,4 +23,5 @@ public enum CombatUnitActionEnum {
         this.typeDesc = desc;
         this.action = action;
     }
+
 }

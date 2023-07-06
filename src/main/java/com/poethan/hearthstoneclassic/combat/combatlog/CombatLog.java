@@ -10,6 +10,8 @@ import lombok.ToString;
 @ToString
 public class CombatLog extends BaseDTO {
     private String gameId;
+    private String logId;
+    private String preLogId;
     private String fromUser;
     private String toUser;
     private String action;

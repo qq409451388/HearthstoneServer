@@ -1,7 +1,7 @@
 package com.poethan.hearthstoneclassic.actionunit;
 
-import com.poethan.hearthstoneclassic.combat.CombatScene;
-import com.poethan.hearthstoneclassic.combat.CombatSceneUserUnit;
+import com.poethan.hearthstoneclassic.combat.interfaces.IApiCombatScene;
+import com.poethan.hearthstoneclassic.combat.interfaces.IApiCombatUserUnit;
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
 import com.poethan.hearthstoneclassic.constants.CombatConstants;
 import com.poethan.hearthstoneclassic.dto.UserActiveData;
@@ -43,22 +43,22 @@ public class CombatActionUnit extends ActionUnit<CombatTcpMessage> {
     }
 
     private void confirmCombat(ChannelHandlerContext ctx, CombatTcpMessage tcpMessage, UserActiveData userActiveData) {
-        CombatScene combatScene = combatLogic.getCombatSceneById(userActiveData.getGameId());
+        IApiCombatScene combatScene = combatLogic.getCombatSceneById(userActiveData.getGameId());
         if (Objects.isNull(combatScene)) {
             ActionUnit.write(ctx, TcpMessage.ERROR("game not found."));
             return;
         }
-        CombatSceneUserUnit combatSceneUserUnit = combatScene.getCombatUserUnit().get(tcpMessage.getUserName());
+        IApiCombatUserUnit combatSceneUserUnit = combatScene.getCombatSceneUserUnit(tcpMessage.getUserName());
         combatSceneUserUnit.confirmFirstRound();
     }
 
     private void exchange(ChannelHandlerContext ctx, CombatTcpMessage tcpMessage, UserActiveData userActiveData) {
-        CombatScene combatScene = combatLogic.getCombatSceneById(userActiveData.getGameId());
+        IApiCombatScene combatScene = combatLogic.getCombatSceneById(userActiveData.getGameId());
         if (Objects.isNull(combatScene)) {
             ActionUnit.write(ctx, TcpMessage.ERROR("game not found."));
             return;
         }
-        CombatSceneUserUnit combatSceneUserUnit = combatScene.getCombatUserUnit().get(tcpMessage.getUserName());
+        IApiCombatUserUnit combatSceneUserUnit = combatScene.getCombatSceneUserUnit(tcpMessage.getUserName());
         combatSceneUserUnit.exchangeCard(tcpMessage.getCardIds());
     }
 }

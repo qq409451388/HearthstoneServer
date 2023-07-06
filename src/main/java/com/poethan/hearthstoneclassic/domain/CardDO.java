@@ -1,5 +1,6 @@
 package com.poethan.hearthstoneclassic.domain;
 
+import com.poethan.hearthstoneclassic.combat.ability.AbstractAbility;
 import com.poethan.hearthstoneclassic.constants.CombatUnitConstants;
 import com.poethan.jear.jdbc.BaseDO;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import java.util.List;
 
 @Getter
 @Setter
@@ -88,14 +90,14 @@ public class CardDO extends BaseDO<Long> {
      * @link CardSpecialAbilityConst
      */
     @Column(name = "special_ability")
-    private String specialAbility;
+    private List<AbstractAbility> specialAbility;
 
     /**
      * 特性
      * @link CardCharacteristicConst
      */
     @Column(name = "characteristic")
-    private String characteristic;
+    private List<String> characteristic;
 
     /**
      * 稀有度
@@ -130,6 +132,7 @@ public class CardDO extends BaseDO<Long> {
         return CombatUnitConstants.TYPE_WEAPON.equals(this.cardType);
     }
 
+    // 会替换Hero的卡牌
     public boolean typeBoss() {
         return CombatUnitConstants.TYPE_BOSS.equals(this.cardType);
     }

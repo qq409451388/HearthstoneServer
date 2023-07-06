@@ -4,23 +4,31 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.poethan.hearthstoneclassic.actionunit.ActionUnit;
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
 import com.poethan.hearthstoneclassic.combat.combatunit.*;
+import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
+import com.poethan.hearthstoneclassic.combat.interfaces.INotifyCombatScene;
+import com.poethan.hearthstoneclassic.constants.SelectorTypeConstants;
 import com.poethan.hearthstoneclassic.domain.CardDO;
+import com.poethan.hearthstoneclassic.dto.*;
 import com.poethan.hearthstoneclassic.dto.tcpmessage.CombatTcpMessage;
 import com.poethan.hearthstoneclassic.dto.tcpmessage.TcpMessage;
-import com.poethan.hearthstoneclassic.dto.UserSession;
 import com.poethan.hearthstoneclassic.logic.CardLogic;
 import com.poethan.jear.dto.BaseDTO;
+import com.poethan.jear.utils.EzDataUtils;
 import com.poethan.jear.utils.JsonUtils;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
-public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
+@Slf4j
+public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUnit {
     @JsonIgnore
     private CardLogic cardLogic;
     /**
@@ -33,16 +41,22 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
     private ListUnit<CardDO> handCardCollection;
     private ListUnit<CardDO> deckCardCollection;
     private ListUnit<AbstractCombatUnit> combatUnits;
-    private Career career;
+    private CombatUnitHero combatUnitHero;
     private Integer magic;
     private Integer maxMagic;
     @JsonIgnore
     private boolean isActive;
     @JsonIgnore
     private boolean isConfirmHandCard;
+    private ActiveCardUnit activeCardUnit;
+    private ListUnit<CombatLog> combatUndoLogs;
 
     public void sendToClient(TcpMessage message) {
         ActionUnit.write(this.session, message);
+    }
+
+    public void sendToRival(TcpMessage message) {
+        ActionUnit.write(this.getCombatScene().getAnotherUserUnit(this.session.getUserName()).getSession(), message);
     }
 
     public CombatSceneUserUnit(CardLogic cardLogic) {
@@ -54,6 +68,7 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
         this.isConfirmHandCard = false;
         this.magic = 0;
         this.maxMagic = 0;
+        this.combatUndoLogs = new ListUnit<>(9999);
     }
 
     public void firstRound() {
@@ -79,8 +94,12 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
 
     public void confirmFirstRound() {
         this.setConfirmHandCard(true);
-        this.sendToClient(CombatTcpMessage.firstRound(this));
         this.combatUnits.trigger(AbstractCombatUnit::startOfGame);
+        // 如果是活动玩家，那么进入第一回合
+        if (this.isActive()) {
+            this.newRound();
+        }
+        this.sendToClient(CombatTcpMessage.firstRound(this.getCombatScene().getGameId(), this));
     }
 
     public void exchangeCard(List<Long> cardIds) {
@@ -89,7 +108,7 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
             this.handCardCollection.removeIf(cardDO -> cardDO.getId().equals(cardId));
             this.handCardCollection.add(this.deckCardCollection.remove(0));
         });
-        this.sendToClient(TcpMessage.OK());
+        confirmFirstRound();
     }
 
     public void newRound() {
@@ -109,9 +128,19 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
     }
 
     @Override
+    public IAbilityCombatUserUnit getAnotherUserUnit() {
+        return this.getCombatScene().getAnotherUserUnit(this.getSession().getUserName());
+    }
+
+    @Override
     public void passCard(int cnt) {
+        if (this.deckCardCollection.size() < cnt) {
+            this.sendToClient(TcpMessage.ERROR("deck card not enough."));
+            return;
+        }
         for (int i = 0; i < cnt; i++) {
-            this.handCardCollection.add(this.deckCardCollection.remove(0));
+            CardDO newCard = this.deckCardCollection.remove(0);
+            this.handCardCollection.add(newCard);
         }
     }
 
@@ -120,52 +149,168 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
         this.magic -= cost;
     }
 
+    /**
+     * 收工了！
+     * @return boolean
+     */
+    private boolean isOverRound() {
+        if (Objects.equals(this.magic, this.maxMagic)) {
+            return true;
+        }
+        int diffMagic = this.maxMagic - this.magic;
+        // 没有够用的法力水晶
+        boolean noMagicLeft = this.combatUnits.stream().noneMatch(
+                s-> s.getCardDO().getCardCost() <= diffMagic
+                                && this.combatUnitHero.getSkill().getCost() <= diffMagic
+        );
+        // 没有有效的战斗单位
+        boolean noCombatUnitLeft = this.combatUnits.stream().noneMatch(AbstractCombatUnit::isActive);
+        boolean overRound = noMagicLeft && noCombatUnitLeft;
+        if (overRound) {
+            log.info("over round.");
+        }
+        return overRound;
+    }
+
     public void passCardOpposite(int cnt) {
         this.combatScene.getAnotherUserUnit(this.getSession().getUserName()).passCard(cnt);
     }
 
-    public void use(CardDO cardDO) {
-        CombatLog combatLog = null;
-        if (cardDO.typeMagic()) {
-            CombatUnitMagic combatUnitMagic = new CombatUnitMagic();
-            this.costMagic(cardDO.getCardCost());
-            combatLog = combatUnitMagic.use();
+    public void select(ICombatUnitSelfSelector combatUnitSelector, ICombatUnitTargetSelector targetCombatUnitSelector) {
+        if (!EzDataUtils.checkAll(combatUnitSelector)) {
+            this.sendToClient(TcpMessage.ERROR("param error."));
+            return;
         }
-        if (cardDO.typeWeapon()) {
-            CombatUnitWeapon combatUnitWeapon = new CombatUnitWeapon();
-            this.career.setWeapon(combatUnitWeapon);
-            this.costMagic(cardDO.getCardCost());
-            combatLog = combatUnitWeapon.use();
+        switch (combatUnitSelector.getSelectType()) {
+            case SelectorTypeConstants.SELECT_TYPE_HAND_CARD->{
+                combatUnitSelector.setHandCard(this.getHandCardCollection().get(combatUnitSelector.getHandCardIndex()));
+            }
+            case SelectorTypeConstants.SELECT_TYPE_COMBAT_UNIT -> {
+                combatUnitSelector.setCombatUnits(this.getCombatUnits().get(combatUnitSelector.getCombatUnitIndex()));
+            }
+            case SelectorTypeConstants.SELECT_TYPE_SKILL -> {
+                combatUnitSelector.setSkill(this.getCombatUnitHero().getSkill());
+            }
+            case SelectorTypeConstants.SELECT_TYPE_HERO -> {
+                combatUnitSelector.setCareer(this.getCombatUnitHero());
+            }
         }
-        this.afterDirective(combatLog);
+        // 可以不选择目标，即为null
+        if (Objects.nonNull(targetCombatUnitSelector)) {
+            switch (targetCombatUnitSelector.getSelectType()) {
+                case SelectorTypeConstants.SELECT_TYPE_COMBAT_UNIT -> {
+                    AbstractCombatUnit combatUnit;
+                    if (targetCombatUnitSelector.isSelf()) {
+                        combatUnit = this.getCombatUnits().get(targetCombatUnitSelector.getCombatUnitIndex());
+                    } else {
+                        combatUnit = this.getAnotherUserUnit().getCombatUnits()
+                                .get(targetCombatUnitSelector.getCombatUnitIndex());
+                    }
+                    targetCombatUnitSelector.setCombatUnits(combatUnit);
+                }
+                case SelectorTypeConstants.SELECT_TYPE_HERO -> {
+                    if (targetCombatUnitSelector.isSelf()) {
+                        targetCombatUnitSelector.setCareer(this.getCombatUnitHero());
+                    } else {
+                        targetCombatUnitSelector.setCareer(this.getAnotherUserUnit().getCombatUnitHero());
+                    }
+                }
+                case SelectorTypeConstants.SELECT_TYPE_ALL_ATTENDANT -> {
+                    if (targetCombatUnitSelector.isSelf()) {
+                        targetCombatUnitSelector.setCombatUnits(this.getCombatUnits());
+                    } else {
+                        targetCombatUnitSelector.setCombatUnits(this.getAnotherUserUnit().getCombatUnits());
+                    }
+                }
+                case SelectorTypeConstants.SELECT_TYPE_ALL_UNIT -> {
+                    if (targetCombatUnitSelector.isSelf()) {
+                        List<AbstractCombatUnit> units = new ArrayList<>(this.getCombatUnits());
+                        units.add(this.getCombatUnitHero());
+                        targetCombatUnitSelector.setCombatUnits(units);
+                    } else {
+                        List<AbstractCombatUnit> units = new ArrayList<>(this.getAnotherUserUnit().getCombatUnits());
+                        units.add(this.getAnotherUserUnit().getCombatUnitHero());
+                        targetCombatUnitSelector.setCombatUnits(units);
+                    }
+                }
+                case SelectorTypeConstants.SELECT_TYPE_RANDOM -> {
+
+                }
+                case SelectorTypeConstants.SELECT_TYPE_PUT_ON -> {
+                    if (!EzDataUtils.check(targetCombatUnitSelector.getCombatUnitIndex())) {
+                        log.error("selectType is PutOn, but combatUnitIndex is null.");
+                    }
+                }
+            }
+        }
+        ActiveCardUnit activeCardUnit = new ActiveCardUnit(this);
+        activeCardUnit.setSelectCombatUnit(combatUnitSelector);
+        activeCardUnit.setTargetCombatUnit(targetCombatUnitSelector);
+        this.setActiveCardUnit(activeCardUnit);
+        this.sendToRival(CombatTcpMessage.select(this.getCombatScene().getGameId(), activeCardUnit));
     }
 
-    public void use(CardDO cardDO, int index) {
-        CombatLog combatLog = null;
-        if (cardDO.typeAttendant()) {
-            CombatUnitAttendant combatUnitAttendant = new CombatUnitAttendant();
-            combatUnitAttendant.loadEvent(cardLogic.analyseCardEvent(cardDO));
-            this.putAttendantOnCombat(combatUnitAttendant, index);
-            this.costMagic(cardDO.getCardCost());
-            combatLog = combatUnitAttendant.use();
+    public void drop() {
+        this.setActiveCardUnit(null);
+        this.sendToRival(CombatTcpMessage.drop(this.getCombatScene().getGameId()));
+    }
+
+    @Override
+    public void use() {
+        ICombatUnitSelfSelector selfSelector = this.activeCardUnit.getSelectCombatUnit();
+        ICombatUnitTargetSelector targetSelector = this.activeCardUnit.getTargetCombatUnit();
+        switch (selfSelector.getSelectType()) {
+            case SelectorTypeConstants.SELECT_TYPE_HAND_CARD -> {
+                this.useHandCard(selfSelector.getHandCard(), targetSelector);
+            }
         }
-        if (cardDO.typeBoss()) {
-            Career career = new Career();
-            this.setCareer(career);
-            CombatUnitAttendant combatUnitAttendant = new CombatUnitAttendant();
-            this.putAttendantOnCombat(combatUnitAttendant, index);
-            this.costMagic(cardDO.getCardCost());
-            combatLog = career.use();
+        this.activeCardUnit = null;
+        this.sendUndoActions();
+    }
+
+    private void useHandCard(CardDO handCard, ICombatUnitTargetSelector targetSelector) {
+        this.handCardCollection.remove(handCard);
+        if (handCard.typeAttendant()) {
+            // 手牌随从上场
+            if (SelectorTypeConstants.SELECT_TYPE_PUT_ON == targetSelector.getSelectType()) {
+                CombatUnitAttendant combatUnit = new CombatUnitAttendant(handCard);
+                CombatLog combatLog = combatUnit.use(this.activeCardUnit);
+                this.addUndoLog(combatLog);
+            }
         }
-        this.afterDirective(combatLog);
+        if (handCard.typeMagic()) {
+            if (SelectorTypeConstants.SELECT_TYPE_COMBAT_UNIT == targetSelector.getSelectType()) {
+                CombatUnitMagic combatUnitMagic = new CombatUnitMagic(handCard);
+                CombatLog combatLog = combatUnitMagic.use(this.activeCardUnit);
+                this.addUndoLog(combatLog);
+            }
+        }
+    }
+
+    /**
+     * 服务端将计算过程缓存在combatUndoLogs中，向客户端发送未执行过的动作
+     */
+    private void sendUndoActions() {
+        CombatTcpMessage combatTcpMessage = new CombatTcpMessage(this.getCombatScene().getGameId());
+        combatTcpMessage.setCombatLog(this.combatUndoLogs);
+        combatTcpMessage.setGameId(this.getCombatScene().getGameId());
+        this.sendToClient(combatTcpMessage);
+        this.sendToRival(combatTcpMessage);
+        this.combatUndoLogs.clear();
+    }
+
+    private void addUndoLog(CombatLog combatLog) {
+        combatLog.setGameId(this.getCombatScene().getGameId());
+        combatLog.setPreLogId(this.combatUndoLogs.getLast().getLogId());
+        this.combatUndoLogs.add(combatLog);
     }
 
     public void attack(AbstractCombatUnit combatUnit) {
         CombatLog combatLog = null;
         if (combatUnit instanceof CombatUnitAttendant) {
             combatLog = ((CombatUnitAttendant) combatUnit).attack();
-        } else if (combatUnit instanceof Career) {
-            combatLog = ((Career) combatUnit).attack();
+        } else if (combatUnit instanceof CombatUnitHero) {
+            combatLog = ((CombatUnitHero) combatUnit).attack();
         }
         this.afterDirective(combatLog);
     }
@@ -173,7 +318,7 @@ public class CombatSceneUserUnit extends BaseDTO implements IApiCombatUserUnit{
     /**
      * {@link CombatSceneUserUnit#endRound()}
      */
-    public void notifyNextRound() {
+    private void notifyNextRound() {
         this.combatScene.nextRound();
     }
 
