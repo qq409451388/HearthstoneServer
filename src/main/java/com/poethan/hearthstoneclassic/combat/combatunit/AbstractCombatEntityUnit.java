@@ -1,10 +1,9 @@
 package com.poethan.hearthstoneclassic.combat.combatunit;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.poethan.hearthstoneclassic.combat.combatlog.CombatAttackLog;
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
+import com.poethan.hearthstoneclassic.combat.function.AbstractFunc;
 import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
-import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,32 +20,33 @@ abstract public class AbstractCombatEntityUnit extends AbstractCombatUnit {
         this.combatUserUnit = abilityCombatUserUnit;
     }
 
-    public CombatLog attack(AbstractCombatUnit abstractCombatUnit) {
-        if (this.combatUserUnit.hasTaunt() && !abstractCombatUnit.isTaunt()) {
+    abstract public CombatLog attack(AbstractCombatEntityUnit combatEntityUnit);
+
+    protected CombatLog attackCheck(AbstractCombatEntityUnit abstractCombatUnit) {
+        if (this.getCombatUserUnit().hasValidTauntCombatUnits()
+                && (abstractCombatUnit instanceof CombatUnitHero
+                || (
+                abstractCombatUnit instanceof CombatUnitAttendant
+                        && !((CombatUnitAttendant) abstractCombatUnit).hasTaunt()
+        )
+        )
+        ) {
             return CombatLog.Error("有嘲讽的单位必须攻击嘲讽单位");
         }
-        CombatAttackLog combatAttachLog = new CombatAttackLog();
-        combatAttachLog.setSelfUnit(this);
-        combatAttachLog.setTargetUnit(abstractCombatUnit);
-        if (abstractCombatUnit instanceof CombatUnitHero) {
-            combatAttachLog.setTargetCost(this.getDamage());
-            combatAttachLog.setTargetPreHealth(((CombatUnitHero)abstractCombatUnit).getHealth());
-            ((CombatUnitHero)abstractCombatUnit).costHealth(this.getDamage());
-            combatAttachLog.setTargetPostHealth(((CombatUnitHero)abstractCombatUnit).getHealth());
-        } else if (abstractCombatUnit instanceof CombatUnitAttendant) {
-            combatAttachLog.setTargetCost(this.getDamage());
-            combatAttachLog.setSelfPreHealth(this.getHealth());
-            combatAttachLog.setTargetPreHealth(((CombatUnitAttendant)abstractCombatUnit).getHealth());
-
-            ((CombatUnitAttendant)abstractCombatUnit).costHealth(this.getDamage());
-            this.costHealth(((CombatUnitAttendant)abstractCombatUnit).getDamage());
-
-            combatAttachLog.setSelfPreHealth(this.getHealth());
-            combatAttachLog.setTargetPostHealth(((CombatUnitAttendant)abstractCombatUnit).getHealth());
+        if (abstractCombatUnit instanceof CombatUnitAttendant) {
+            if (((CombatUnitAttendant) abstractCombatUnit).hasStealth()) {
+                return CombatLog.Error("潜行单位不能被攻击");
+            }
         }
-        this.triggerEvent(CombatUnitActionEnum.ATTACK);
-        return combatAttachLog;
+        if (!this.getAllowTargetType().contains(abstractCombatUnit.getClass())) {
+            return CombatLog.Error("目标单位不可选中");
+        }
+        return null;
     }
 
     abstract public void costHealth(int damage);
+
+    public void applyFunc(AbstractFunc func) {
+        func.loadUnit(this).apply();
+    }
 }

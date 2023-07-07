@@ -1,6 +1,7 @@
 package com.poethan.hearthstoneclassic.combat.interfaces;
 
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
+import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatEntityUnit;
 import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatUnit;
 import com.poethan.hearthstoneclassic.domain.CardDO;
 import com.poethan.hearthstoneclassic.dto.ActiveCardUnit;
@@ -24,7 +25,9 @@ public interface IApiCombatUserUnit {
      */
     void exchangeCard(List<Long> cardIds);
     void endRound();
-    boolean hasTaunt();
+    boolean hasTauntCombatUnits();
+    boolean hasValidTauntCombatUnits();
+    void addUndoLog(CombatLog combatLog);
     //**********************************************
 
 
@@ -44,11 +47,11 @@ public interface IApiCombatUserUnit {
      * 使用一个手牌
      */
     void use();
-    void attack(AbstractCombatUnit self, AbstractCombatUnit target);
+    void attack(AbstractCombatUnit self, AbstractCombatEntityUnit target);
 
     /**
      * 英雄攻击
      */
-    void attack(AbstractCombatUnit target);
+    void attack(AbstractCombatEntityUnit target);
     //**********************************************
 }

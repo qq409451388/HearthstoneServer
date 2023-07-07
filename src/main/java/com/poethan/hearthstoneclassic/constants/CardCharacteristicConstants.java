@@ -37,12 +37,12 @@ public class CardCharacteristicConstants {
     public static final String VENOMOUS = "VENOMOUS";
 
     /**
-     * 过载
-     */
-    public static final String OVERLOAD = "OVERLOAD";
-
-    /**
      * 伤害免疫
      */
     public static final String IMMUNE = "IMMUNE";
+
+    /**
+     * 突袭
+     */
+    public static final String RAID = "RAID";
 }

@@ -1,10 +1,9 @@
 package com.poethan.hearthstoneclassic.combat.combatunit;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.poethan.hearthstoneclassic.combat.CombatScene;
 import com.poethan.hearthstoneclassic.combat.ability.AbstractAbility;
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
-import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
+import com.poethan.hearthstoneclassic.constants.CardCharacteristicConstants;
 import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 import com.poethan.hearthstoneclassic.domain.CardDO;
 import com.poethan.hearthstoneclassic.dto.ActiveCardUnit;
@@ -70,12 +69,19 @@ abstract public class AbstractCombatUnit {
         combatUnitEvent.get(action.getType()).forEach(AbstractAbility::trigger);
     }
 
-    abstract public boolean isTaunt();
+    protected void triggerEventAndRemove(CombatUnitActionEnum action) {
+        combatUnitEvent.get(action.getType()).forEach(AbstractAbility::trigger);
+        combatUnitEvent.remove(action.getType());
+    }
 
     /**
      * 使用一个单位
      */
     abstract public CombatLog use(ActiveCardUnit activeCardUnit);
+
+    public void startOfNextCombat() {
+        this.triggerEventAndRemove(CombatUnitActionEnum.START_OF_NEXT_COMBAT);
+    }
 
     public void startOfGame() {
         this.triggerEvent(CombatUnitActionEnum.START_OF_GAME);

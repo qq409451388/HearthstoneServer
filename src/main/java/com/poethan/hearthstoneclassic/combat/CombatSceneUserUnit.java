@@ -40,9 +40,10 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
     private UserSession session;
     private ListUnit<CardDO> handCardCollection;
     private ListUnit<CardDO> deckCardCollection;
-    private ListUnit<AbstractCombatUnit> combatUnits;
+    private ListUnit<CombatUnitAttendant> combatUnits;
     private CombatUnitHero combatUnitHero;
     private Integer magic;
+    private Integer magicLock;
     private Integer maxMagic;
     @JsonIgnore
     private boolean isActive;
@@ -68,6 +69,7 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
         this.isActive = false;
         this.isConfirmHandCard = false;
         this.magic = 0;
+        this.magicLock = 0;
         this.maxMagic = 0;
         this.combatUndoLogs = new ListUnit<>(9999);
     }
@@ -121,6 +123,7 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
         this.magic = this.maxMagic;
         this.passCard(1);
         this.combatUnits.trigger(AbstractCombatUnit::startOfCombat);
+        this.combatUnits.trigger(AbstractCombatUnit::startOfNextCombat);
     }
 
     public void endRound() {
@@ -128,8 +131,18 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
         this.notifyNextRound();
     }
 
-    private void putAttendantOnCombat(CombatUnitAttendant combatUnitAttendant, int index) {
-        this.combatUnits.insert(index, combatUnitAttendant);
+    @Override
+    public boolean hasTauntCombatUnits() {
+        return this.combatUnits.stream().anyMatch(CombatUnitAttendant::hasTaunt);
+    }
+
+    public boolean hasValidTauntCombatUnits() {
+        return this.combatUnits.stream().anyMatch(CombatUnitAttendant::hasValidTaunt);
+    }
+
+    @Override
+    public Integer getRound() {
+        return this.getCombatScene().getRound();
     }
 
     @Override
@@ -152,6 +165,10 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
     @Override
     public void costMagic(int cost) {
         this.magic -= cost;
+    }
+
+    public void lockMagic(int cost) {
+        this.magicLock += cost;
     }
 
     /**
@@ -204,7 +221,7 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
         if (Objects.nonNull(targetCombatUnitSelector)) {
             switch (targetCombatUnitSelector.getSelectType()) {
                 case SelectorTypeConstants.SELECT_TYPE_COMBAT_UNIT -> {
-                    AbstractCombatUnit combatUnit;
+                    AbstractCombatEntityUnit combatUnit;
                     if (targetCombatUnitSelector.isSelf()) {
                         combatUnit = this.getCombatUnits().get(targetCombatUnitSelector.getCombatUnitIndex());
                     } else {
@@ -229,11 +246,11 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
                 }
                 case SelectorTypeConstants.SELECT_TYPE_ALL_UNIT -> {
                     if (targetCombatUnitSelector.isSelf()) {
-                        List<AbstractCombatUnit> units = new ArrayList<>(this.getCombatUnits());
+                        List<AbstractCombatEntityUnit> units = new ArrayList<>(this.getCombatUnits());
                         units.add(this.getCombatUnitHero());
                         targetCombatUnitSelector.setCombatUnits(units);
                     } else {
-                        List<AbstractCombatUnit> units = new ArrayList<>(this.getAnotherUserUnit().getCombatUnits());
+                        List<AbstractCombatEntityUnit> units = new ArrayList<>(this.getAnotherUserUnit().getCombatUnits());
                         units.add(this.getAnotherUserUnit().getCombatUnitHero());
                         targetCombatUnitSelector.setCombatUnits(units);
                     }
@@ -303,18 +320,18 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
         this.combatUndoLogs.clear();
     }
 
-    private void addUndoLog(CombatLog combatLog) {
+    public void addUndoLog(CombatLog combatLog) {
         combatLog.setGameId(this.getCombatScene().getGameId());
         combatLog.setPreLogId(this.combatUndoLogs.getLast().getLogId());
         this.combatUndoLogs.add(combatLog);
     }
 
-    public void attack(AbstractCombatUnit selfCombatUnit,AbstractCombatUnit targetCombatUnit) {
+    public void attack(AbstractCombatUnit selfCombatUnit,AbstractCombatEntityUnit targetCombatUnit) {
         CombatLog combatLog = ((CombatUnitAttendant) selfCombatUnit).attack(targetCombatUnit);
         this.afterDirective(combatLog);
     }
 
-    public void attack(AbstractCombatUnit targetCombatUnit) {
+    public void attack(AbstractCombatEntityUnit targetCombatUnit) {
         CombatLog combatLog = this.getCombatUnitHero().attack(targetCombatUnit);
         this.afterDirective(combatLog);
     }

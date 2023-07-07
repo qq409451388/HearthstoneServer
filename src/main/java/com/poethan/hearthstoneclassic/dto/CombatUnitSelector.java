@@ -1,6 +1,7 @@
 package com.poethan.hearthstoneclassic.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatEntityUnit;
 import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitHero;
 import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatUnit;
 import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitSkill;
@@ -34,17 +35,17 @@ public class CombatUnitSelector extends BaseDTO implements ICombatUnitTargetSele
     @JsonIgnore
     private CardDO handCard;
     @JsonIgnore
-    private List<AbstractCombatUnit> combatUnits;
+    private List<? extends AbstractCombatEntityUnit> combatUnits;
     @JsonIgnore
     private CombatUnitSkill skill;
     @JsonIgnore
     private CombatUnitHero combatUnitHero;
 
-    public void setCombatUnits(AbstractCombatUnit combatUnit) {
+    public void setCombatUnits(AbstractCombatEntityUnit combatUnit) {
         this.combatUnits = List.of(combatUnit);
     }
 
-    public void setCombatUnits(List<AbstractCombatUnit> combatUnit) {
+    public void setCombatUnits(List<? extends AbstractCombatEntityUnit> combatUnit) {
         this.combatUnits = combatUnit;
     }
 

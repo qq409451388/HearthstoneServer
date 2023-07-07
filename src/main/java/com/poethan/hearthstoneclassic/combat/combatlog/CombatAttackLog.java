@@ -4,6 +4,8 @@ import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatUnit;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class CombatAttackLog extends CombatLog {

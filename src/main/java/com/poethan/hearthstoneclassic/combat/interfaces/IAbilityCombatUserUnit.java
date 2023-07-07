@@ -1,5 +1,6 @@
 package com.poethan.hearthstoneclassic.combat.interfaces;
 
+import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitAttendant;
 import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitHero;
 import com.poethan.hearthstoneclassic.combat.ListUnit;
 import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatUnit;
@@ -15,9 +16,10 @@ public interface IAbilityCombatUserUnit extends IApiCombatUserUnit {
      */
     void setDeckId(Long deckId);
     void setActive(boolean isActive);
+    Integer getRound();
     UserSession getSession();
     IAbilityCombatUserUnit getAnotherUserUnit();
-    ListUnit<AbstractCombatUnit> getCombatUnits();
+    ListUnit<CombatUnitAttendant> getCombatUnits();
     CombatUnitHero getCombatUnitHero();
     ListUnit<CardDO> getHandCardCollection();
     ListUnit<CardDO> getDeckCardCollection();
@@ -29,4 +31,5 @@ public interface IAbilityCombatUserUnit extends IApiCombatUserUnit {
     void passCard(int cnt);
     void passCardOpposite(int cnt);
     void costMagic(int cost);
+    void lockMagic(int cost);
 }

@@ -1,6 +1,7 @@
 package com.poethan.hearthstoneclassic.combat.combatunit;
 
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
+import com.poethan.hearthstoneclassic.combat.function.AbstractFunc;
 import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
 import com.poethan.hearthstoneclassic.constants.CombatUnitConstants;
 import com.poethan.hearthstoneclassic.domain.CardDO;
@@ -14,11 +15,21 @@ public class CombatUnitMagic extends AbstractCombatUnit{
         this.setCombatUnitType(CombatUnitConstants.TYPE_MAGIC);
     }
 
+    public AbstractFunc getFunc() {
+        return null;
+    }
+
     /**
      * 使用一个单位
      */
     @Override
     public CombatLog use(ActiveCardUnit activeCardUnit) {
+        activeCardUnit.getCombatUserUnit().costMagic(this.getCardDO().getCardCost());
+        activeCardUnit.getTargetCombatUnit().getCombatUnits().forEach(combatUnit -> {
+            if (combatUnit instanceof CombatUnitAttendant) {
+                combatUnit.applyFunc(this.getFunc());
+            }
+        });
         return null;
     }
 }

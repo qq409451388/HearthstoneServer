@@ -33,4 +33,5 @@ public interface INotifyCombatScene {
      */
     List<CombatLog> getRoundLogs();
 
+    Integer getRound();
 }

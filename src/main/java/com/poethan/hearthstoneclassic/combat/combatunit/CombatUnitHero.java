@@ -18,9 +18,7 @@ import java.util.Objects;
 public class CombatUnitHero extends AbstractCombatEntityUnit {
     private CombatUnitWeapon weapon;
     private CombatUnitSkill skill;
-    private Integer health;
     private Integer shield;
-    private Integer damage;
 
     public CombatUnitHero(IAbilityCombatUserUnit abilityCombatUserUnit) {
         super(abilityCombatUserUnit);
@@ -54,4 +52,38 @@ public class CombatUnitHero extends AbstractCombatEntityUnit {
         return null;
     }
 
+    public CombatLog attack(AbstractCombatEntityUnit abstractCombatUnit) {
+        CombatLog combatLog = this.attackCheck(abstractCombatUnit);
+        if (Objects.nonNull(combatLog)) {
+            return combatLog;
+        }
+        CombatAttackLog combatAttachLog = new CombatAttackLog();
+        combatAttachLog.setSelfUnit(this);
+        combatAttachLog.setTargetUnit(abstractCombatUnit);
+        if (abstractCombatUnit instanceof CombatUnitHero) {
+            combatAttachLog.setTargetCost(this.getDamage());
+            combatAttachLog.setTargetPreHealth(abstractCombatUnit.getHealth());
+
+            abstractCombatUnit.costHealth(this.getDamage());
+
+            combatAttachLog.setTargetPostHealth((abstractCombatUnit).getHealth());
+            // 设置已经攻击过
+            this.setActive(false);
+        } else if (abstractCombatUnit instanceof CombatUnitAttendant combatUnitAttendant) {
+            combatAttachLog.setTargetCost(this.getDamage());
+            combatAttachLog.setSelfPreHealth(this.getHealth());
+            combatAttachLog.setTargetPreHealth(combatUnitAttendant.getHealth());
+
+            combatUnitAttendant.costHealth(this.getDamage());
+            this.costHealth(combatUnitAttendant.getDamage());
+
+            combatAttachLog.setSelfPreHealth(this.getHealth());
+            combatAttachLog.setTargetPostHealth(combatUnitAttendant.getHealth());
+            // 设置已经攻击过
+            this.setActive(false);
+        }
+        this.triggerEvent(CombatUnitActionEnum.ATTACK);
+
+        return combatAttachLog;
+    }
 }

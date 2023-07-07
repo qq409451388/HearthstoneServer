@@ -1,15 +1,16 @@
 package com.poethan.hearthstoneclassic.dto;
 
+import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatEntityUnit;
 import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitHero;
-import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatUnit;
 
 import java.util.List;
 
 public interface ICombatUnitTargetSelector {
     Integer getSelectType();
     Integer getCombatUnitIndex();
-    void setCombatUnits(AbstractCombatUnit combatUnit);
-    void setCombatUnits(List<AbstractCombatUnit> combatUnit);
+    List<? extends AbstractCombatEntityUnit> getCombatUnits();
+    void setCombatUnits(AbstractCombatEntityUnit combatUnit);
+    void setCombatUnits(List<? extends AbstractCombatEntityUnit> combatUnit);
     void setCombatUnitHero(CombatUnitHero combatUnitHero);
 
     /**

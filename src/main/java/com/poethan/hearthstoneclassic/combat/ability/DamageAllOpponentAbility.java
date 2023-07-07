@@ -23,11 +23,10 @@ public class DamageAllOpponentAbility extends NumericValueAbility {
     }
 
     public void trigger() {
-        ListUnit<AbstractCombatUnit> opponentList =
+        ListUnit<CombatUnitAttendant> opponentList =
                 this.getCombatEntityUnit().getCombatUserUnit().getAnotherUserUnit().getCombatUnits();
-        for (AbstractCombatUnit abstractCombatUnit : opponentList) {
-            ((AbstractCombatEntityUnit)abstractCombatUnit).costHealth(this.getValue());
+        for (CombatUnitAttendant abstractCombatUnit : opponentList) {
+            abstractCombatUnit.costHealth(this.getValue());
         }
-        this.getCombatEntityUnit().getCombatUserUnit();
     }
 }

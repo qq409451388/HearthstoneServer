@@ -1,7 +1,7 @@
 package com.poethan.hearthstoneclassic.dto;
 
+import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatEntityUnit;
 import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitHero;
-import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatUnit;
 import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitSkill;
 import com.poethan.hearthstoneclassic.domain.CardDO;
 
@@ -13,7 +13,7 @@ public interface ICombatUnitSelfSelector {
     CardDO getHandCard();
 
     Integer getCombatUnitIndex();
-    void setCombatUnits(AbstractCombatUnit combatUnit);
+    void setCombatUnits(AbstractCombatEntityUnit combatUnit);
 
     void setSkill(CombatUnitSkill skill);
 
