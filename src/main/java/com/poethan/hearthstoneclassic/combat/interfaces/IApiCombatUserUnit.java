@@ -15,9 +15,7 @@ import java.util.List;
  */
 public interface IApiCombatUserUnit {
 
-    /**
-     * round相关
-     */
+    //*****round相关********************************
     void firstRound();
     void confirmFirstRound();
     /**
@@ -26,10 +24,12 @@ public interface IApiCombatUserUnit {
      */
     void exchangeCard(List<Long> cardIds);
     void endRound();
+    boolean hasTaunt();
+    //**********************************************
 
-    /**
-     * directive相关
-     */
+
+
+    //*****directive相关*****************************
     /**
      * 选择一个手牌
      */
@@ -50,4 +50,5 @@ public interface IApiCombatUserUnit {
      * 英雄攻击
      */
     void attack(AbstractCombatUnit target);
+    //**********************************************
 }

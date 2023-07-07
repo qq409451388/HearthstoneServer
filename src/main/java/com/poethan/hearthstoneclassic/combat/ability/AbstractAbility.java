@@ -1,7 +1,7 @@
 package com.poethan.hearthstoneclassic.combat.ability;
 
 import com.poethan.hearthstoneclassic.combat.CombatScene;
-import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitAttendant;
+import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatEntityUnit;
 import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 import com.poethan.hearthstoneclassic.dto.ICombatUnitSelfSelector;
 import com.poethan.hearthstoneclassic.dto.ICombatUnitTargetSelector;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 abstract public class AbstractAbility extends BaseDTO {
-    private CombatUnitAttendant combatUnitAttendant;
+    private AbstractCombatEntityUnit combatEntityUnit;
     /**
      * 主动方选择器，可以为null，默认为当前单位
      */
@@ -31,7 +31,4 @@ abstract public class AbstractAbility extends BaseDTO {
 
     abstract public void trigger();
 
-    public CombatScene getCombatScene() {
-        return this.getCombatUnitAttendant().getCombatScene();
-    }
 }

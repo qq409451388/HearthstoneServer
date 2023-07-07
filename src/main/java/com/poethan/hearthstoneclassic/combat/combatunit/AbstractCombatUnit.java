@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.poethan.hearthstoneclassic.combat.CombatScene;
 import com.poethan.hearthstoneclassic.combat.ability.AbstractAbility;
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
+import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
 import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 import com.poethan.hearthstoneclassic.domain.CardDO;
 import com.poethan.hearthstoneclassic.dto.ActiveCardUnit;
@@ -38,9 +39,6 @@ abstract public class AbstractCombatUnit {
     @JsonIgnore
     private List<Class<? extends AbstractCombatUnit>> allowTargetType;
 
-    @JsonIgnore
-    private CombatScene combatScene;
-
     /**
      * 是否可以使用：攻击、释放
      */
@@ -71,6 +69,8 @@ abstract public class AbstractCombatUnit {
     protected void triggerEvent(CombatUnitActionEnum action) {
         combatUnitEvent.get(action.getType()).forEach(AbstractAbility::trigger);
     }
+
+    abstract public boolean isTaunt();
 
     /**
      * 使用一个单位

@@ -15,4 +15,12 @@ public class CombatLog extends BaseDTO {
     private String fromUser;
     private String toUser;
     private String action;
+    private String msg;
+
+    public static CombatLog Error(String msg) {
+        CombatLog combatLog = new CombatLog();
+        combatLog.setAction("error");
+        combatLog.setMsg(msg);
+        return combatLog;
+    }
 }

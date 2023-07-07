@@ -1,6 +1,7 @@
 package com.poethan.hearthstoneclassic.combat.combatunit;
 
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
+import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
 import com.poethan.hearthstoneclassic.constants.CombatUnitConstants;
 import com.poethan.hearthstoneclassic.domain.CardDO;
 import com.poethan.hearthstoneclassic.dto.ActiveCardUnit;

@@ -277,7 +277,7 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
         this.handCardCollection.remove(handCard);
         if (handCard.typeAttendant()) {
             if (SelectorTypeConstants.SELECT_TYPE_PUT_ON == targetSelector.getSelectType()) {
-                CombatUnitAttendant combatUnit = new CombatUnitAttendant(handCard);
+                CombatUnitAttendant combatUnit = new CombatUnitAttendant(this, handCard);
                 CombatLog combatLog = combatUnit.use(this.activeCardUnit);
                 this.addUndoLog(combatLog);
             }

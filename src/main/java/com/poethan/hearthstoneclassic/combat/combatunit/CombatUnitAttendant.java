@@ -2,15 +2,12 @@ package com.poethan.hearthstoneclassic.combat.combatunit;
 
 import com.poethan.hearthstoneclassic.combat.ability.AbstractAbility;
 import com.poethan.hearthstoneclassic.combat.ability.DamageAllOpponentAbility;
-import com.poethan.hearthstoneclassic.combat.ability.NumericValueAbility;
-import com.poethan.hearthstoneclassic.combat.combatlog.CombatAttackLog;
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
+import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
 import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 import com.poethan.hearthstoneclassic.constants.CombatUnitConstants;
-import com.poethan.hearthstoneclassic.constants.SelectorTypeConstants;
 import com.poethan.hearthstoneclassic.domain.CardDO;
 import com.poethan.hearthstoneclassic.dto.ActiveCardUnit;
-import com.poethan.hearthstoneclassic.dto.CombatUnitSelector;
 import com.poethan.jear.core.Env;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,13 +25,14 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-public class CombatUnitAttendant extends AbstractCombatUnit {
+public class CombatUnitAttendant extends AbstractCombatEntityUnit {
     private Integer health;
     private Integer damage;
     private List<String> buffList;
     private List<AbstractAbility> ablilityList;
 
-    public CombatUnitAttendant(CardDO cardDO) {
+    public CombatUnitAttendant(IAbilityCombatUserUnit userUnit, CardDO cardDO) {
+        super(userUnit);
         Assert.isTrue(cardDO.typeAttendant(), "cardDO must be attendant");
         this.setCardDO(cardDO);
         this.setAllowTargetType(Lists.newArrayList(CombatUnitAttendant.class, CombatUnitHero.class));
@@ -88,33 +86,6 @@ public class CombatUnitAttendant extends AbstractCombatUnit {
     public CombatLog dead() {
         this.triggerEvent(CombatUnitActionEnum.DEAD);
         return null;
-    }
-
-    /**
-     * 攻击
-     */
-    public CombatLog attack(AbstractCombatUnit abstractCombatUnit) {
-        CombatAttackLog combatAttachLog = new CombatAttackLog();
-        combatAttachLog.setSelfUnit(this);
-        combatAttachLog.setTargetUnit(abstractCombatUnit);
-        if (abstractCombatUnit instanceof CombatUnitHero) {
-            combatAttachLog.setTargetCost(this.getDamage());
-            combatAttachLog.setTargetPreHealth(((CombatUnitHero)abstractCombatUnit).getHealth());
-            ((CombatUnitHero)abstractCombatUnit).costHealth(this.getDamage());
-            combatAttachLog.setTargetPostHealth(((CombatUnitHero)abstractCombatUnit).getHealth());
-        } else if (abstractCombatUnit instanceof CombatUnitAttendant) {
-            combatAttachLog.setTargetCost(this.getDamage());
-            combatAttachLog.setSelfPreHealth(this.getHealth());
-            combatAttachLog.setTargetPreHealth(((CombatUnitAttendant)abstractCombatUnit).getHealth());
-
-            ((CombatUnitAttendant)abstractCombatUnit).costHealth(this.getDamage());
-            this.costHealth(((CombatUnitAttendant)abstractCombatUnit).getDamage());
-
-            combatAttachLog.setSelfPreHealth(this.getHealth());
-            combatAttachLog.setTargetPostHealth(((CombatUnitAttendant)abstractCombatUnit).getHealth());
-        }
-        this.triggerEvent(CombatUnitActionEnum.ATTACK);
-        return combatAttachLog;
     }
 
     public CombatLog magicAttack(List<AbstractCombatUnit> abstractCombatUnits) {
