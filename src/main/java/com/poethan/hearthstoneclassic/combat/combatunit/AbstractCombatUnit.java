@@ -1,7 +1,8 @@
 package com.poethan.hearthstoneclassic.combat.combatunit;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.poethan.hearthstoneclassic.combat.combatevent.AbstractCombatEvent;
+import com.poethan.hearthstoneclassic.combat.CombatScene;
+import com.poethan.hearthstoneclassic.combat.ability.AbstractAbility;
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
 import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 import com.poethan.hearthstoneclassic.domain.CardDO;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,9 @@ abstract public class AbstractCombatUnit {
     @JsonIgnore
     private List<Class<? extends AbstractCombatUnit>> allowTargetType;
 
+    @JsonIgnore
+    private CombatScene combatScene;
+
     /**
      * 是否可以使用：攻击、释放
      */
@@ -46,9 +51,9 @@ abstract public class AbstractCombatUnit {
     /**
      * @see com.poethan.hearthstoneclassic.constants.CombatEventConstants
      */
-    private Map<CombatUnitActionEnum, AbstractCombatEvent> combatUnitEvent;
+    private Map<String, List<AbstractAbility>> combatUnitEvent;
 
-    public void loadEvent(Collection<AbstractCombatEvent> events) {
+    public void loadEvent(Collection<AbstractAbility> events) {
         events.forEach(this::loadEvent);
     }
 
@@ -56,15 +61,15 @@ abstract public class AbstractCombatUnit {
      * 装载触发事件
      * @param event 事件内容
      */
-    public void loadEvent(AbstractCombatEvent event) {
-        combatUnitEvent.put(event.getBindAction(), event);
+    public void loadEvent(AbstractAbility event) {
+        combatUnitEvent.computeIfAbsent(event.getEvent(), a->new ArrayList<>()).add(event);
     }
 
     /**
-     * 触发事件
+     * 触发能力
      */
     protected void triggerEvent(CombatUnitActionEnum action) {
-        combatUnitEvent.get(action).trigger(this);
+        combatUnitEvent.get(action.getType()).forEach(AbstractAbility::trigger);
     }
 
     /**
@@ -77,6 +82,6 @@ abstract public class AbstractCombatUnit {
     }
 
     public void startOfCombat() {
-        this.triggerEvent(CombatUnitActionEnum.START_OF_GAME);
+        this.triggerEvent(CombatUnitActionEnum.START_OF_COMBAT);
     }
 }

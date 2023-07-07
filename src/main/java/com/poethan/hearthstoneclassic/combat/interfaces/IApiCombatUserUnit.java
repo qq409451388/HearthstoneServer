@@ -44,5 +44,10 @@ public interface IApiCombatUserUnit {
      * 使用一个手牌
      */
     void use();
+    void attack(AbstractCombatUnit self, AbstractCombatUnit target);
+
+    /**
+     * 英雄攻击
+     */
     void attack(AbstractCombatUnit target);
 }

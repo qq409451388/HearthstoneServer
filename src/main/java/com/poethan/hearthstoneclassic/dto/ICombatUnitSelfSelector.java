@@ -6,7 +6,7 @@ import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitSkill;
 import com.poethan.hearthstoneclassic.domain.CardDO;
 
 public interface ICombatUnitSelfSelector {
-    int getSelectType();
+    Integer getSelectType();
 
     Integer getHandCardIndex();
     void setHandCard(CardDO handCard);
@@ -17,5 +17,5 @@ public interface ICombatUnitSelfSelector {
 
     void setSkill(CombatUnitSkill skill);
 
-    void setCareer(CombatUnitHero combatUnitHero);
+    void setCombatUnitHero(CombatUnitHero combatUnitHero);
 }

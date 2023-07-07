@@ -21,6 +21,7 @@ public interface IAbilityCombatUserUnit extends IApiCombatUserUnit {
     CombatUnitHero getCombatUnitHero();
     ListUnit<CardDO> getHandCardCollection();
     ListUnit<CardDO> getDeckCardCollection();
+    boolean isDead();
 
     /**
      * unit相关

@@ -7,7 +7,9 @@ import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitSkill;
 import com.poethan.hearthstoneclassic.domain.CardDO;
 import com.poethan.jear.dto.BaseDTO;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 
@@ -17,13 +19,18 @@ public class CombatUnitSelector extends BaseDTO implements ICombatUnitTargetSele
     /**
      * @see com.poethan.hearthstoneclassic.constants.SelectorTypeConstants
      */
+    @NonNull
     private Integer selectType;
     /**
-     * 0 self 1 opponent
+     * 0 self 1 opponent 2 opponent and self
      */
+    @NonNull
     private Integer targetType;
+    @Nullable
     private Integer handCardIndex;
+    @Nullable
     private Integer combatUnitIndex;
+
     @JsonIgnore
     private CardDO handCard;
     @JsonIgnore
@@ -45,4 +52,5 @@ public class CombatUnitSelector extends BaseDTO implements ICombatUnitTargetSele
     public boolean isSelf() {
         return 0 == targetType;
     }
+
 }

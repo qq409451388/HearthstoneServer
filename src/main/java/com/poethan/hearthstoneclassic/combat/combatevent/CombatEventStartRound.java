@@ -9,16 +9,6 @@ import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 public class CombatEventStartRound extends AbstractCombatEvent {
 
     @Override
-    public void bindAction() {
-
-    }
-
-    @Override
-    public CombatUnitActionEnum getBindAction() {
-        return null;
-    }
-
-    @Override
     public void trigger(AbstractCombatUnit unit) {
 
     }

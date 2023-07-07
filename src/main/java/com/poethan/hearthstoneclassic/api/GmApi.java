@@ -1,7 +1,6 @@
 package com.poethan.hearthstoneclassic.api;
 
 import com.poethan.hearthstoneclassic.actionunit.ActionUnit;
-import com.poethan.hearthstoneclassic.combat.CombatScene;
 import com.poethan.hearthstoneclassic.config.TcpClientContainer;
 import com.poethan.hearthstoneclassic.constants.UserConstants;
 import com.poethan.hearthstoneclassic.dto.tcpmessage.ChatTcpMessage;
@@ -38,8 +37,6 @@ public class GmApi {
 
     @GetMapping("/test")
     public void test() {
-        CombatScene combatScene = combatLogic.init("guohan", "lixin", 1L);
-        combatScene = combatLogic.openWithAccept(combatScene.getGameId(), 2L);
-        combatScene.start();
+
     }
 }

@@ -1,7 +1,6 @@
 package com.poethan.hearthstoneclassic.combat;
 
 import com.poethan.hearthstoneclassic.combat.combatlog.CombatLog;
-import com.poethan.hearthstoneclassic.combat.combatlog.CombatLogHero;
 import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
 import com.poethan.hearthstoneclassic.combat.interfaces.IApiCombatScene;
 import com.poethan.hearthstoneclassic.combat.interfaces.INotifyCombatScene;
@@ -92,9 +91,8 @@ public class CombatScene extends BaseDTO implements INotifyCombatScene, IApiComb
     }
 
     public boolean isEnd() {
-        CombatLog log = this.logs.get(this.round).get(logs.size()-1);
-        if (log instanceof CombatLogHero) {
-            return ((CombatLogHero) log).getPostHealth() <= 0;
+        if (this.getCombatSceneUserUnit1().isDead() || this.getCombatSceneUserUnit2().isDead()) {
+            return true;
         }
         return false;
     }

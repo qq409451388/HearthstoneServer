@@ -49,6 +49,7 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
     @JsonIgnore
     private boolean isConfirmHandCard;
     private ActiveCardUnit activeCardUnit;
+    @JsonIgnore
     private ListUnit<CombatLog> combatUndoLogs;
 
     public void sendToClient(TcpMessage message) {
@@ -69,6 +70,10 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
         this.magic = 0;
         this.maxMagic = 0;
         this.combatUndoLogs = new ListUnit<>(9999);
+    }
+
+    public boolean isDead() {
+        return this.getCombatUnitHero().getHealth() <= 0;
     }
 
     public void firstRound() {
@@ -192,7 +197,7 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
                 combatUnitSelector.setSkill(this.getCombatUnitHero().getSkill());
             }
             case SelectorTypeConstants.SELECT_TYPE_HERO -> {
-                combatUnitSelector.setCareer(this.getCombatUnitHero());
+                combatUnitSelector.setCombatUnitHero(this.getCombatUnitHero());
             }
         }
         // 可以不选择目标，即为null
@@ -210,9 +215,9 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
                 }
                 case SelectorTypeConstants.SELECT_TYPE_HERO -> {
                     if (targetCombatUnitSelector.isSelf()) {
-                        targetCombatUnitSelector.setCareer(this.getCombatUnitHero());
+                        targetCombatUnitSelector.setCombatUnitHero(this.getCombatUnitHero());
                     } else {
-                        targetCombatUnitSelector.setCareer(this.getAnotherUserUnit().getCombatUnitHero());
+                        targetCombatUnitSelector.setCombatUnitHero(this.getAnotherUserUnit().getCombatUnitHero());
                     }
                 }
                 case SelectorTypeConstants.SELECT_TYPE_ALL_ATTENDANT -> {
@@ -271,7 +276,6 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
     private void useHandCard(CardDO handCard, ICombatUnitTargetSelector targetSelector) {
         this.handCardCollection.remove(handCard);
         if (handCard.typeAttendant()) {
-            // 手牌随从上场
             if (SelectorTypeConstants.SELECT_TYPE_PUT_ON == targetSelector.getSelectType()) {
                 CombatUnitAttendant combatUnit = new CombatUnitAttendant(handCard);
                 CombatLog combatLog = combatUnit.use(this.activeCardUnit);
@@ -305,13 +309,13 @@ public class CombatSceneUserUnit extends BaseDTO implements IAbilityCombatUserUn
         this.combatUndoLogs.add(combatLog);
     }
 
-    public void attack(AbstractCombatUnit combatUnit) {
-        CombatLog combatLog = null;
-        if (combatUnit instanceof CombatUnitAttendant) {
-            combatLog = ((CombatUnitAttendant) combatUnit).attack();
-        } else if (combatUnit instanceof CombatUnitHero) {
-            combatLog = ((CombatUnitHero) combatUnit).attack();
-        }
+    public void attack(AbstractCombatUnit selfCombatUnit,AbstractCombatUnit targetCombatUnit) {
+        CombatLog combatLog = ((CombatUnitAttendant) selfCombatUnit).attack(targetCombatUnit);
+        this.afterDirective(combatLog);
+    }
+
+    public void attack(AbstractCombatUnit targetCombatUnit) {
+        CombatLog combatLog = this.getCombatUnitHero().attack(targetCombatUnit);
         this.afterDirective(combatLog);
     }
 
