@@ -8,7 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="HearthstoneClassic" />
-        <module name="hearthstoneclassic" />
+        <module name="HearthstoneServer" />
       </profile>
       <profile name="Annotation profile for Jear" enabled="true">
         <sourceOutputDir name="target/classes/generated-sources/annotations" />
@@ -17,11 +17,15 @@
         <module name="Jear" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="hearthstoneclassic" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="HearthstoneClassic" options="-parameters" />
-      <module name="Jear" options="" />
+      <module name="HearthstoneServer" options="-parameters" />
+      <module name="Jear" options="-parameters" />
       <module name="hearthstoneclassic" options="-parameters" />
     </option>
   </component>
