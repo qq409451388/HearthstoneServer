@@ -9,13 +9,13 @@ import jakarta.annotation.PostConstruct;
 
 import java.util.Objects;
 
-abstract public class ActionUnit<M extends TcpMessage> {
+public abstract class ActionUnit<M extends TcpMessage> {
     @PostConstruct
     public void addToFactory() {
         ActionUnitFactory.set(this.getClass().getSimpleName().replace("ActionUnit", ""), this);
     }
 
-    abstract public void channelReadLogic(ChannelHandlerContext ctx, M tcpMessage);
+    public abstract void channelReadLogic(ChannelHandlerContext ctx, M tcpMessage);
 
     public static void write(ChannelHandlerContext ctx, TcpMessage tcpMessage) {
         ctx.writeAndFlush(tcpMessage.toByteArray());
