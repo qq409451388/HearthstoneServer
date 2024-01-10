@@ -1,18 +1,0 @@
-
-`	java:S112%"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
-`	java:S1120"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
-T
-java:S5993
-"9Change the visibility of this constructor to "protected".(„ÿ½éşÿÿÿÿ
-r
-java:S4276"WRefactor this code to use the more specialised Functional Interface 'Predicate<String>'(Êôí®ÿÿÿÿÿ
-T
-java:S1854"?Remove this useless assignment to local variable "contentType".(æùÆC
-T
-java:S1854">Remove this useless assignment to local variable "routingKey".(¡½Ø²
-\
-java:S1161":Add the "@Override" annotation above this method signature(œº¥ÿÿÿÿÿ8ÓÑØçÎ1
-E
-java:S1481"/Remove this unused "routingKey" local variable.(¡½Ø²
-E
-java:S1481"0Remove this unused "contentType" local variable.(æùÆC

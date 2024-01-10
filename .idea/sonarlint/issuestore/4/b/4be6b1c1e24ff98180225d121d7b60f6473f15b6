@@ -1,34 +1,0 @@
-
-^
-java:S6208!"CMerge the previous cases into this one using comma-separated label.(ˆôŸ“úÿÿÿÿ
-`
-java:S1124
-"EReorder the modifiers to comply with the Java Language Specification.(æñö’ÿÿÿÿÿ
-`
-java:S1124"EReorder the modifiers to comply with the Java Language Specification.(Èþïñþÿÿÿÿ
-[
-java:S1124"EReorder the modifiers to comply with the Java Language Specification.(€êêÄ
-U
-java:S1854":Remove this useless assignment to local variable "object".(ÀÉÖ·ýÿÿÿÿ
-E
-java:S1172"/Remove this unused method parameter "funcName".(úóöº
-F
-java:S1481"+Remove this unused "object" local variable.(ÀÉÖ·ýÿÿÿÿ
-v
-java:S3923"[Remove this conditional structure or edit its code blocks so that they're not all the same.(Ñ¸Ü§ýÿÿÿÿ
-Q	java:S125"<This block of commented-out lines of code should be removed.(‰¯ã³
-V	java:S125"<This block of commented-out lines of code should be removed.(«ô‡Øûÿÿÿÿ
-Q	java:S125#"<This block of commented-out lines of code should be removed.(’Ì¥¼
-^
-java:S6355("HAdd 'since' and/or 'forRemoval' arguments to the @Deprecated annotation.(õˆúš
-P
-java:S1133)"5Do not forget to remove this deprecated code someday.(¦‚Ê‘ýÿÿÿÿ
-C
-java:S1123)"(Add the missing @deprecated Javadoc tag.(¦‚Ê‘ýÿÿÿÿ
-W
-java:S11265"AReplace this if-then-else statement by a single return statement.(›Šù¿
-V	java:S125A"<This block of commented-out lines of code should be removed.(Ì•õ¨øÿÿÿÿ
-K
-java:S1068"5Remove this unused "UNSUPPORT_COMMAND" private field.(€êêÄ
-M
-java:S1144"7Remove this unused private "unsupportException" method.(úóöº
