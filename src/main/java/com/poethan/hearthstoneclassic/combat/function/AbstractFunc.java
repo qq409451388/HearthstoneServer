@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatUnit;
-import com.poethan.jear.dto.BaseDTO;
+import com.poethan.jear.core.dto.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 

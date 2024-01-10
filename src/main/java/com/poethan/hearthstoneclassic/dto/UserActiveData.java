@@ -1,7 +1,7 @@
 package com.poethan.hearthstoneclassic.dto;
 
 import com.poethan.hearthstoneclassic.constants.UserConstants;
-import com.poethan.jear.dto.BaseDTO;
+import com.poethan.jear.core.dto.BaseDTO;
 import com.poethan.jear.utils.EzDataUtils;
 import lombok.Getter;
 import lombok.Setter;

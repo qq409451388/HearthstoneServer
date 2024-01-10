@@ -3,7 +3,7 @@ package com.poethan.hearthstoneclassic.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
 import com.poethan.hearthstoneclassic.constants.ActiveCardUnitConstants;
-import com.poethan.jear.dto.BaseDTO;
+import com.poethan.jear.core.dto.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

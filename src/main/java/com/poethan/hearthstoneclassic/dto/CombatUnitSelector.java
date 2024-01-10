@@ -6,7 +6,7 @@ import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitHero;
 import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatUnit;
 import com.poethan.hearthstoneclassic.combat.combatunit.CombatUnitSkill;
 import com.poethan.hearthstoneclassic.domain.CardDO;
-import com.poethan.jear.dto.BaseDTO;
+import com.poethan.jear.core.dto.BaseDTO;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;

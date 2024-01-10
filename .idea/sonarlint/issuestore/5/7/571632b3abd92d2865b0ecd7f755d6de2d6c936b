@@ -1,0 +1,12 @@
+
+Q	java:S110t"<This class has 6 parents which is greater than 5 authorized.(ä§öÍ
+d
+java:S3824,"IReplace this "Map.containsKey()" with a call to "Map.computeIfPresent()".(‰ÎëÔùÿÿÿÿ
+U
+java:S1118":Add a private constructor to hide the implicit public one.(ÏªÆøÿÿÿÿ
+B
+java:S1602",Remove useless curly braces around statement(•ŠÕĞ
+G
+java:S1135;"2Complete the task associated to this TODO comment.(ôÕ
+P
+java:S1161u":Add the "@Override" annotation above this method signature(°…ÙË

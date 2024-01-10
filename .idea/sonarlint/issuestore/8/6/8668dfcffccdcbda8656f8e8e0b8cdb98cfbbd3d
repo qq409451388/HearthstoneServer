@@ -1,0 +1,7 @@
+
+u
+java:S1104"ZMake combatUserUnit a static final constant or non-public and provide accessors if needed.(Ñ¡¥Æþÿÿÿÿ
+R
+java:S1948"0Make "combatUserUnit" transient or serializable.(Ñ¡¥Æþÿÿÿÿ8€Áä“Ï1
+?
+java:S2140E")Use "java.util.Random.nextInt()" instead.(ñ»˜Ñ

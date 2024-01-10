@@ -1,0 +1,5 @@
+
+0
+java:S1220""Move this file to a named package.
+§
+java:S1130"çRemove the declaration of thrown exception 'com.fasterxml.jackson.core.JsonProcessingException' which is a subclass of 'java.io.IOException'.(¥Ñ˚¡

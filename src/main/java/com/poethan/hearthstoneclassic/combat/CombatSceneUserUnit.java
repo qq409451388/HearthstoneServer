@@ -12,7 +12,7 @@ import com.poethan.hearthstoneclassic.dto.*;
 import com.poethan.hearthstoneclassic.dto.tcpmessage.CombatTcpMessage;
 import com.poethan.hearthstoneclassic.dto.tcpmessage.TcpMessage;
 import com.poethan.hearthstoneclassic.logic.CardLogic;
-import com.poethan.jear.dto.BaseDTO;
+import com.poethan.jear.core.dto.BaseDTO;
 import com.poethan.jear.utils.EzDataUtils;
 import com.poethan.jear.utils.JsonUtils;
 import lombok.Getter;

@@ -10,7 +10,7 @@ import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 import com.poethan.hearthstoneclassic.constants.CombatUnitConstants;
 import com.poethan.hearthstoneclassic.domain.CardDO;
 import com.poethan.hearthstoneclassic.dto.ActiveCardUnit;
-import com.poethan.jear.core.Env;
+import com.poethan.jear.core.config.Env;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

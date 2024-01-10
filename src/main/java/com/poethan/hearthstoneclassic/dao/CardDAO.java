@@ -2,7 +2,7 @@ package com.poethan.hearthstoneclassic.dao;
 
 import com.poethan.hearthstoneclassic.constants.CommonConstants;
 import com.poethan.hearthstoneclassic.domain.CardDO;
-import com.poethan.jear.core.Env;
+import com.poethan.jear.core.config.Env;
 import com.poethan.jear.jdbc.BaseDAO;
 import com.poethan.jear.jdbc.SqlParam;
 import org.assertj.core.util.Lists;

@@ -5,7 +5,7 @@ import com.poethan.hearthstoneclassic.combat.combatunit.AbstractCombatEntityUnit
 import com.poethan.hearthstoneclassic.constants.CombatUnitActionEnum;
 import com.poethan.hearthstoneclassic.dto.ICombatUnitSelfSelector;
 import com.poethan.hearthstoneclassic.dto.ICombatUnitTargetSelector;
-import com.poethan.jear.dto.BaseDTO;
+import com.poethan.jear.core.dto.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 

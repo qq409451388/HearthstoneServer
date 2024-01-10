@@ -8,13 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="HearthstoneClassic" />
+        <module name="jear-jdbc" />
+        <module name="jear-utils" />
         <module name="HearthstoneServer" />
-      </profile>
-      <profile name="Annotation profile for Jear" enabled="true">
-        <sourceOutputDir name="target/classes/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/classes/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="Jear" />
+        <module name="jear-web" />
+        <module name="jear-cache" />
+        <module name="jear-core" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -25,8 +24,13 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="HearthstoneClassic" options="-parameters" />
       <module name="HearthstoneServer" options="-parameters" />
-      <module name="Jear" options="-parameters" />
+      <module name="Jear" options="" />
       <module name="hearthstoneclassic" options="-parameters" />
+      <module name="jear-cache" options="-parameters" />
+      <module name="jear-core" options="-parameters" />
+      <module name="jear-jdbc" options="-parameters" />
+      <module name="jear-utils" options="-parameters" />
+      <module name="jear-web" options="-parameters" />
     </option>
   </component>
 </project>

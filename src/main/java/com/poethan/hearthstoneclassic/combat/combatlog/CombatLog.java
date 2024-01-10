@@ -1,6 +1,6 @@
 package com.poethan.hearthstoneclassic.combat.combatlog;
 
-import com.poethan.jear.dto.BaseDTO;
+import com.poethan.jear.core.dto.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

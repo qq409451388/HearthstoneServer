@@ -1,0 +1,10 @@
+
+O
+java:S5993"9Change the visibility of this constructor to "protected".(ï•Ú‹
+Z
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(æ…Ãk
+]	java:S119"IRename this generic name to match the regular expression '^[A-Z][0-9]?$'.(æ…Ãk
+w
+java:S6201"\Replace this instanceof check and cast with 'instanceof ParameterizedType parameterizedtype'(£†Ğ¤ûÿÿÿÿ
+G
+java:S1068"1Remove this unused "domainIdClass" private field.(¡¢õ

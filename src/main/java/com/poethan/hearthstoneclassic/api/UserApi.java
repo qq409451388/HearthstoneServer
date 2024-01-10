@@ -2,10 +2,8 @@ package com.poethan.hearthstoneclassic.api;
 
 import com.poethan.hearthstoneclassic.dao.UserDAO;
 import com.poethan.hearthstoneclassic.domain.UserDO;
-import com.poethan.jear.anno.EzLocalLog;
-import com.poethan.jear.jdbc.JdbcDAO;
-import com.poethan.jear.module.cache.EzRedis;
-import com.poethan.jear.utils.JsonUtils;
+import com.poethan.jear.cache.EzRedis;
+import com.poethan.jear.utils.annotation.EzLocalLog;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

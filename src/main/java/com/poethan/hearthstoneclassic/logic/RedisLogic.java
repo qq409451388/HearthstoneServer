@@ -1,7 +1,7 @@
 package com.poethan.hearthstoneclassic.logic;
 
 import com.poethan.hearthstoneclassic.dto.UserSession;
-import com.poethan.jear.module.cache.EzRedis;
+import com.poethan.jear.cache.EzRedis;
 import com.poethan.jear.utils.JsonUtils;
 import jakarta.annotation.Resource;
 import org.apache.logging.log4j.util.Strings;

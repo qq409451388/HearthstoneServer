@@ -5,7 +5,7 @@ import com.poethan.hearthstoneclassic.combat.interfaces.IAbilityCombatUserUnit;
 import com.poethan.hearthstoneclassic.combat.interfaces.IApiCombatScene;
 import com.poethan.hearthstoneclassic.combat.interfaces.IApiCombatUnitCall;
 import com.poethan.hearthstoneclassic.combat.interfaces.INotifyCombatScene;
-import com.poethan.jear.dto.BaseDTO;
+import com.poethan.jear.core.dto.BaseDTO;
 import com.poethan.jear.utils.EncodeUtils;
 import com.poethan.jear.utils.SystemUtils;
 import lombok.Getter;

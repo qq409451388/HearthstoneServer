@@ -1,0 +1,35 @@
+
+F
+java:S1066¨"/Merge this if statement with the enclosing one.(ôÄÇ½
+K
+java:S1066¯"/Merge this if statement with the enclosing one.(“š”Œÿÿÿÿÿ
+b
+java:S1301œ"KReplace this "switch" statement by "if" statements to increase readability.( ÍÍš
+G
+java:S1948!"+Make "cardLogic" transient or serializable.(Š”Í98Åä“Ï1
+O
+java:S1948'"-Make "combatScene" transient or serializable.(œéÈÀùÿÿÿÿ8Åä“Ï1
+J
+java:S1948+"-Make "combatUnits" transient or serializable.(á–Æê8‘Åä“Ï1
+R
+java:S1948,"0Make "combatUnitHero" transient or serializable.(³´Ë®ûÿÿÿÿ8‘Åä“Ï1
+n
+java:S3776É"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(¥äóˆÿÿÿÿÿ
+?	java:S131Î""Add a default case to this switch.(¸¦Ì£8¦Åä“Ï1
+3
+java:S6205Ï"Remove this redundant block.(‚Åğ
+3
+java:S6205Ò"Remove this redundant block.(³ü¦À
+3
+java:S6205Õ"Remove this redundant block.(§´ü“
+3
+java:S6205Ø"Remove this redundant block.(–ûñœ
+?	java:S131Ş""Add a default case to this switch.(º«8©Åä“Ï1
+?	java:S108‚")Either remove or fill this block of code.(„ğ…Û
+Y
+java:S1117Œ"BRename "activeCardUnit" which hides the field declared at line 52.(¡•­Û
+?	java:S131œ""Add a default case to this switch.( ÍÍš8³Åä“Ï1
+3
+java:S6205"Remove this redundant block.(‚Åğ
+L
+java:S1144²"0Remove this unused private "isOverRound" method.(ÜÔúşÿÿÿÿ
